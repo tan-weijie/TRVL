@@ -50,11 +50,20 @@ function DashboardPage(props) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        let sDate = new Date(startDate);
+        let eDate = new Date(endDate);
+        let difference = (eDate - sDate)/1000/60/60/24;
+        console.log(difference)
+        let interests = [];
+        for(let i = 0; i < difference; i++){
+            interests.push({day:i})
+        }
         const data = {
             _id: uuid(),
             country,
             startDate,
-            endDate
+            endDate,
+            interests,
         };
         axios.post(uri, data)
             .then(response => {
@@ -62,7 +71,7 @@ function DashboardPage(props) {
                 setCountry('');
                 setStartDate('');
                 setEndDate('');
-                window.location = (`./trip/:${data._id}`)
+                window.location = (`./trip/${data._id}`)
             })
             .catch((error)=>{
                 console.log({status: 'bad', msg: error.message})

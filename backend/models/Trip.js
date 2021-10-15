@@ -8,6 +8,7 @@ const tripSchema = new mongoose.Schema(
         endDate: {type: Date, required: true},
         interests: [
             {
+                day: String,
                 name: String,
                 startTime: Date,
                 endTime: Date,
