@@ -1,22 +1,24 @@
 import React from 'react';
 import { BrowserRouter, Route, Link, Switch } from 'react-router-dom'
 import Navbar from './components/Navbar';
-import AddTripPage from './pages/AddTripPage';
+import ShowTripPage from './pages/ShowTripPage';
 import DashboardPage from './pages/DashboardPage';
+import RegisterPage from './pages/RegisterPage';
 
 
 function App() {
     return (
         <BrowserRouter>
-            <Navbar/>
-            <Switch>
-                <Route path='/home'>
+      
+            {/* <Switch> */}
+                <Navbar/>
+                <Route exact path='/home'>
                     <DashboardPage />
                 </Route>
-                <Route path='/new'>
-                    <AddTripPage />
+                <Route path='/trip/:id'>
+                    <ShowTripPage />
                 </Route>
-            </Switch>
+            {/* </Switch> */}
         </BrowserRouter>
     )
 }

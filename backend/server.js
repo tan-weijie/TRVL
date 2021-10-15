@@ -1,6 +1,7 @@
 // dependencies
 const express = require('express');
 const app = express();
+const cors = require('cors');
 
 // db
 const connectDB = require('./models/db');
@@ -8,6 +9,7 @@ const tripModel = require('./models/Trip');
 connectDB()
 
 // Body-parser
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
@@ -23,9 +25,9 @@ app.get('/', async (req, res) => {
 })
 
 // Get 1 trip 
-app.get('/trip', async (req, res) => {
+app.get('/trip/:id', async (req, res) => {
     try {
-        const data = await tripModel.find({_id: req.body});
+        const data = await tripModel.findOne({_id: req.params.id});
         res.send(data);
     } catch (error) {
         console.log({status: 'bad', msg: error.message});
