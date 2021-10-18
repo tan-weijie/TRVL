@@ -1,5 +1,8 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+
+// mui
+import ActivityModal from './ActivityModal'
 import Chip from '@mui/material/Chip';
 import Timeline from '@mui/lab/Timeline';
 import TimelineItem from '@mui/lab/TimelineItem';
@@ -9,31 +12,42 @@ import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
 import TimelineDot from '@mui/lab/TimelineDot';
 import FlightIcon from '@mui/icons-material/Flight';
-import FastfoodIcon from '@mui/icons-material/Fastfood';
-import LaptopMacIcon from '@mui/icons-material/LaptopMac';
-import HotelIcon from '@mui/icons-material/Hotel';
-import RepeatIcon from '@mui/icons-material/Repeat';
 import Typography from '@mui/material/Typography';
+import ExploreIcon from '@mui/icons-material/Explore';
+
+
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+};
 
 export default function CustomizedTimeline(props) {
 
     let sDate = new Date(props.trip.startDate);
     let eDate = new Date(props.trip.endDate);
     let difference = eDate - sDate;
-    difference = difference / 1000 / 60 / 60 / 24
+    difference = difference / 1000 / 60 / 60 / 24;
 
-
-    // let days = [];
-    // console.log(difference);
-    // for (let i = 1; i < difference + 1; i++) {
-    //     days.push(i);
-    // }
-    // console.log(days)
     console.log(props.trip)
 
+    const handleAmend = (e) => {
+
+
+    }
+    useEffect(() => {
+
+    }, [props])
+
     return (
-        <Timeline position="alternate">
-            {props.trip.interests.map((interest, index) => {
+        <Timeline >
+            {props.trip.days.map((day, index) => {
                 if (index == 0) {
                     return (
                         <>
@@ -79,7 +93,7 @@ export default function CustomizedTimeline(props) {
                             </TimelineItem>
                         </>
                     )
-                } else if (index == props.trip.interests.length - 1) {
+                } else if (index == props.trip.days.length - 1) {
                     return (
                         <>
                             <TimelineItem className="day">
@@ -126,26 +140,60 @@ export default function CustomizedTimeline(props) {
                     )
                 } else {
                     return (
-                        <TimelineItem className="day">
-                            <TimelineOppositeContent
-                                sx={{ m: 'auto 0' }}
-                                align="right"
-                                variant="body2"
-                                color="text.secondary"
-                            >
-                                Day {index + 1}
-                            </TimelineOppositeContent>
-                            <TimelineSeparator>
-                                <TimelineConnector />
-                                <Chip label={sDate.toLocaleDateString('en-AU')} />
-                                <TimelineConnector />
-                            </TimelineSeparator>
-                            <TimelineContent sx={{ py: '12px', px: 2 }}>
-                            </TimelineContent>
-                        </TimelineItem>
+                        <>
+                            <TimelineItem className="day">
+                                <TimelineOppositeContent
+                                    sx={{ m: 'auto 0' }}
+                                    align="right"
+                                    variant="body2"
+                                    color="text.secondary"
+                                >
+                                    Day {index + 1}
+                                </TimelineOppositeContent>
+                                <TimelineSeparator>
+                                    <TimelineConnector />
+                                    <Chip label={sDate.toLocaleDateString('en-AU')} />
+                                    <TimelineConnector />
+                                </TimelineSeparator>
+                                <TimelineContent sx={{ py: '12px', px: 2 }}>
+                                    <Typography variant="h6" component="span">
+                                    </Typography>
+                                    {/* <Typography>Activity: {day.activities[0].name}</Typography> */}
+                                    <ActivityModal id={day._id} />
+                                </TimelineContent>
+                            </TimelineItem>
+                            {day.activities.map(element => {
+                                return (
+                                    <TimelineItem className="day">
+                                        <TimelineOppositeContent
+                                            sx={{ m: 'auto 0' }}
+                                            align="right"
+                                            variant="body2"
+                                            color="text.secondary"
+                                        >
+                                        </TimelineOppositeContent>
+                                        <TimelineSeparator>
+                                            <TimelineConnector />
+                                            <TimelineDot>
+                                                <ExploreIcon />
+                                            </TimelineDot>
+                                            <TimelineConnector />
+                                        </TimelineSeparator>
+                                        <TimelineContent sx={{ py: '12px' }}>
+                                            <Typography variant="h6" component="span">
+                                                Activity: {element.name}
+                                            </Typography>
+                                            <Typography>
+                                                Time: {element.startTime}H - {element.endTime}H
+                                            </Typography>
+                                                Transport: {element.transport}
+                                        </TimelineContent>
+                                    </TimelineItem>
+                                )
+                            })}
+                        </>
                     )
                 }
-
             })}
         </Timeline>
     );

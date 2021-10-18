@@ -52,18 +52,32 @@ function DashboardPage(props) {
         e.preventDefault();
         let sDate = new Date(startDate);
         let eDate = new Date(endDate);
-        let difference = (eDate - sDate)/1000/60/60/24;
+        let difference = eDate - sDate;
+        difference = difference / 1000 / 60 / 60 / 24;
         console.log(difference)
-        let interests = [];
-        for(let i = 0; i < difference; i++){
-            interests.push({day:i})
+        let days = [];
+        for (let i = 0; i <= difference; i++) {
+            days.push({ date: i, activities: [] })
         }
+        // const getDatesBetweenDates = (sDate, eDate) => {
+        //     let dates = []
+        //     //to avoid modifying the original date
+        //     const theDate = new Date(sDate)
+        //     while (theDate < eDate) {
+        //         dates = [...dates, new Date(theDate)]
+        //         theDate.setDate(theDate.getDate() + 1)
+        //     }
+        //     return {dates}
+        // }
+
+        // let dates = getDatesBetweenDates(sDate, eDate);
+
         const data = {
             _id: uuid(),
             country,
             startDate,
             endDate,
-            interests,
+            days,
         };
         axios.post(uri, data)
             .then(response => {
@@ -73,14 +87,27 @@ function DashboardPage(props) {
                 setEndDate('');
                 window.location = (`./trip/${data._id}`)
             })
-            .catch((error)=>{
-                console.log({status: 'bad', msg: error.message})
+            .catch(error => {
+                console.log({ status: 'bad', msg: error.message })
             })
     }
 
     const handleClick = (e) => {
         e.preventDefault();
         window.location = (`./trip/${e.target.id}`)
+    }
+
+    const handleDelete = (e) => {
+        e.preventDefault();
+        console.log(e.target.id)
+        axios.delete(uri + e.target.id)
+        .then(response => {
+            console.log('deleted');
+            window.location = ('./home')
+        })
+        .catch(error => {
+            console.log(error.message)
+        })
     }
 
     return (
@@ -127,7 +154,7 @@ function DashboardPage(props) {
                             </CardContent>
                         </CardActionArea>
                         <CardActions>
-                            <Button id={trip._id} size="small" color="primary">
+                            <Button onClick={handleDelete} id={trip._id} size="small" color="primary">
                                 Delete
                             </Button>
                         </CardActions>

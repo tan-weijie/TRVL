@@ -73,17 +73,15 @@ function ShowTripPage(props) {
     let eDate = new Date(trip.endDate);
     let difference = eDate - sDate;
     difference = difference / 1000 / 60 / 60 / 24
-    // console.log(trip.interests[0])
-    if (trip.interests){
-        console.log("TIME",trip.interests[0])
-    }
+    console.log(eDate)
+    console.log(sDate)
   
 
     return (
         <div>
-            {`${difference} days in ${trip.country}`}
+            {`${difference + 1} days in ${trip.country}`}
             <img className="background-image" src={background} />
-            {trip.interests ? <Timeline trip={trip}/> : <div>Loading</div>}
+            {trip.days ? <Timeline trip={trip}/> : <div>Loading</div>}
         </div>
     )
 

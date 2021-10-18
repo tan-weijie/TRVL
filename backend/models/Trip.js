@@ -6,16 +6,20 @@ const tripSchema = new mongoose.Schema(
         country: {type: String, required: true},
         startDate: {type: Date, required: true},
         endDate: {type: Date, required: true},
-        interests: [
+        userId: {type: String},
+        days: [ 
             {
-                day: String,
-                name: String,
-                startTime: Date,
-                endTime: Date,
-                transport: String
+                date: String,
+                activities: [
+                    {
+                        name: {type: String,},
+                        startTime: String,
+                        endTime: String,
+                        transport: String
+                    },
+                ]
             }
         ]
-
     },
     {
         collection: 'trips'
@@ -25,3 +29,4 @@ const tripSchema = new mongoose.Schema(
 const tripModel = mongoose.model('tripModel', tripSchema);
 
 module.exports = tripModel;
+
