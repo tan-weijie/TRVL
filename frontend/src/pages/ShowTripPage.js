@@ -41,33 +41,35 @@ function ShowTripPage(props) {
     // pexels API
 
 
-    // useEffect(() => {
-    //     fetchImage();
-    // }, [])
+    useEffect(() => {
+        fetchImage();
+    }, [])
 
-    // const fetchImage = async () => {
-    //     const apiKey = "563492ad6f91700001000001fb4b588e36424f5db5e96fd30f05c911";
-    //     const imgUri = `https://api.pexels.com/v1/search?query=${trip.country}&orientation=landscape`;
+    const fetchImage = async () => {
+        const apiKey = "563492ad6f91700001000001fb4b588e36424f5db5e96fd30f05c911";
+        const imgUri = `https://api.pexels.com/v1/search?query=${trip.country}&orientation=landscape`;
 
-    //     try {
-    //         let res = await fetch(imgUri,
-    //             {
-    //                 method: 'GET',
-    //                 headers: {
-    //                     Authorization: apiKey,
-    //                     Accept: 'application/json',
-    //                 },
-    //             })
-    //         res = await res.json();
-    //         let i = Math.floor(Math.random() * 15)
-    //         console.log(trip.country);
-    //         console.log(res.photos[i])
-    //         setBackground(res.photos[1].src.landscape)
-    //     }
-    //     catch (err) {
-    //         console.log("ERROR", err);
-    //     }
-    // }
+        try {
+            let res = await fetch(imgUri,
+                {
+                    method: 'GET',
+                    headers: {
+                        Authorization: apiKey,
+                        Accept: 'application/json',
+                    },
+                })
+            res = await res.json();
+            let i = Math.floor(Math.random() * 15)
+            console.log(trip.country);
+            console.log(res.photos[i])
+            setBackground(res.photos[1].src.landscape)
+        }
+        catch (err) {
+            console.log("ERROR", err);
+        }
+    }
+
+    console.log('background',background)
 
     let sDate = new Date(trip.startDate);
     let eDate = new Date(trip.endDate);
@@ -80,7 +82,7 @@ function ShowTripPage(props) {
     return (
         <div>
             {`${difference + 1} days in ${trip.country}`}
-            <img className="background-image" src={background} />
+            {background && <img className="background-image" src={background} />}
             {trip.days ? <Timeline trip={trip}/> : <div>Loading</div>}
         </div>
     )

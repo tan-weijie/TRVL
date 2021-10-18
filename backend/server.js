@@ -71,7 +71,7 @@ app.post('/', async (req, res) => {
 })
 
 // Delete 1 trip
-app.delete('/:id', async (req, res) => {
+app.delete('/trip/:id', async (req, res) => {
     try {
         await tripModel.deleteOne({_id: req.params.id})
         res.send('deleted')
@@ -81,7 +81,7 @@ app.delete('/:id', async (req, res) => {
 })
 
 // Update 1 trip
-app.put('/:id', async (req, res) => {
+app.put('/trip/:id', async (req, res) => {
     try {
         const data = await tripModel.findOneAndUpdate({_id: req.params.id}, req.body)
         res.send(data)
@@ -94,22 +94,36 @@ app.put('/:id', async (req, res) => {
 app.put('/days/:id', async (req, res) => {
     try {
         console.log('params',req.params.id)
-        // const data = await tripModel.updateOne({"days._id": req.params.id},{ "$set": {"days.$.activities": req.body}}, {upsert:false})
-        const data = await tripModel.updateOne({"days._id": req.params.id},{ "$push": {"days.$.activities": req.body}}, {upsert:false})
-        // db.collection.update(
-        //     { "friends.u.username": "michael" }, 
-        //     { "$set": { "friends.$.u.name": "hello" } }
-        // )
-        // const data = await tripModel.updateOne({"days._id": req.params.id}, {$push: {"activities": req.body}})
+        const data = await tripModel.updateOne({"days._id": req.params.id},{ "$push": {"days.$.activities": req.body}})
         console.log(req.body)
         console.log(data);
-        // if (!data){
-        //     await tripModel.insertOne(req.body);
-        //     console.log('inserted')
-        // }
-        res.send('hello')
+        res.send('edited')
     } catch (error) {
         console.log({status: 'bad', msg: error.message})
+    }
+})
+// Edit activities
+app.put('/activities/:id', async (req, res) => {
+    try{
+        const data = await tripModel.updateOne({"days.activities._id": req.params.id}, {"$set": {"days.0.activities": req.body}})
+        // const data = await tripModel.findOne({"activities._id": req.params.id});
+        console.log(data);
+        res.send('updated');
+    } catch(err){
+        console.log({status: 'bad', msg: err.message})
+    }
+})
+
+
+// Delete activities
+app.delete('/activities/:id', async (req, res) => {
+    try {
+        console.log('params', req.params.id)
+        const data = await tripModel.updateOne({"activities._id": req.params.id}, {"$pull": {"days.$[].activities": {"_id": req.params.id}}})
+        console.log(data);
+        res.send(data)
+    } catch (err) {
+        console.log({status: 'bad', msg: err.message})
     }
 })
 

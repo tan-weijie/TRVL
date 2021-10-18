@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 // mui
 import ActivityModal from './ActivityModal'
@@ -14,6 +15,8 @@ import TimelineDot from '@mui/lab/TimelineDot';
 import FlightIcon from '@mui/icons-material/Flight';
 import Typography from '@mui/material/Typography';
 import ExploreIcon from '@mui/icons-material/Explore';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import { Box } from '@mui/system';
 
 
 const style = {
@@ -41,12 +44,27 @@ export default function CustomizedTimeline(props) {
 
 
     }
+    const uri = "http://localhost:5000/activities/"
+
+    const handleDelete = (e) => {
+        console.log(e.target.id);
+        e.preventDefault();
+
+        axios.delete(uri + e.target.id)
+        .then(res =>{
+            console.log(res);
+        })
+        .catch (err=>{
+            console.log(err);
+        })
+    }
+
     useEffect(() => {
 
     }, [props])
 
     return (
-        <Timeline >
+        <Timeline>
             {props.trip.days.map((day, index) => {
                 if (index == 0) {
                     return (
@@ -180,13 +198,20 @@ export default function CustomizedTimeline(props) {
                                             <TimelineConnector />
                                         </TimelineSeparator>
                                         <TimelineContent sx={{ py: '12px' }}>
+                                            <Box sx={{ width: 300, p: 2, border: '1px dashed grey' }}>
                                             <Typography variant="h6" component="span">
                                                 Activity: {element.name}
                                             </Typography>
                                             <Typography>
                                                 Time: {element.startTime}H - {element.endTime}H
                                             </Typography>
+                                            <Typography>
                                                 Transport: {element.transport}
+                                            </Typography>
+                                            <DeleteForeverIcon 
+                                            id={element._id} 
+                                            onClick={handleDelete}/>
+                                            </Box>
                                         </TimelineContent>
                                     </TimelineItem>
                                 )
