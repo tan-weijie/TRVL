@@ -16,6 +16,7 @@ import FlightIcon from '@mui/icons-material/Flight';
 import Typography from '@mui/material/Typography';
 import ExploreIcon from '@mui/icons-material/Explore';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import { Button } from '@mui/material';
 import { Box } from '@mui/system';
 
 
@@ -33,6 +34,8 @@ const style = {
 
 export default function CustomizedTimeline(props) {
 
+    const[refresh, setRefresh] = useState(false);
+
     let sDate = new Date(props.trip.startDate);
     let eDate = new Date(props.trip.endDate);
     let difference = eDate - sDate;
@@ -49,10 +52,10 @@ export default function CustomizedTimeline(props) {
     const handleDelete = (e) => {
         console.log(e.target.id);
         e.preventDefault();
-
         axios.delete(uri + e.target.id)
         .then(res =>{
             console.log(res);
+            window.location.href = `./${props.trip._id}`
         })
         .catch (err=>{
             console.log(err);
@@ -61,7 +64,7 @@ export default function CustomizedTimeline(props) {
 
     useEffect(() => {
 
-    }, [props])
+    }, [])
 
     return (
         <Timeline>
@@ -177,12 +180,12 @@ export default function CustomizedTimeline(props) {
                                     <Typography variant="h6" component="span">
                                     </Typography>
                                     {/* <Typography>Activity: {day.activities[0].name}</Typography> */}
-                                    <ActivityModal id={day._id} />
+                                    <ActivityModal trip={props.trip} id={day._id} />
                                 </TimelineContent>
                             </TimelineItem>
                             {day.activities.map(element => {
                                 return (
-                                    <TimelineItem className="day">
+                                    <TimelineItem key="1" className="day">
                                         <TimelineOppositeContent
                                             sx={{ m: 'auto 0' }}
                                             align="right"
@@ -208,9 +211,13 @@ export default function CustomizedTimeline(props) {
                                             <Typography>
                                                 Transport: {element.transport}
                                             </Typography>
-                                            <DeleteForeverIcon 
+                                            <Button   id={element._id} 
+                                            onClick={(handleDelete)}>
+                                            {/* <DeleteForeverIcon
                                             id={element._id} 
-                                            onClick={handleDelete}/>
+                                            onClick={handleDelete} 
+                                         /> */}DEL
+                                            </Button>
                                             </Box>
                                         </TimelineContent>
                                     </TimelineItem>

@@ -68,6 +68,7 @@ export default function ActivityModal (props) {
             setStartTime('');
             setEndTime('');
             setTransport('');
+            window.location.href = `./${props.trip._id}`
         }) 
         .catch(error =>{
             console.log(error.message);
