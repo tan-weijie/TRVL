@@ -30,7 +30,7 @@ function DashboardPage(props) {
     const beach = "https://images.pexels.com/photos/1705254/pexels-photo-1705254.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200";
 
 
-    const [background, setBackground] = useState();
+    const [background, setBackground] = useState('');
     const [country, setCountry] = useState('');
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
@@ -52,6 +52,32 @@ function DashboardPage(props) {
             })
     }
 
+    // fetch image
+    // useEffect(() => {
+    //     fetchImage();
+    // }, [trips])
+
+    const fetchImage = async (country) => {
+        const apiKey = "563492ad6f91700001000001fb4b588e36424f5db5e96fd30f05c911";
+        const imgUri = `https://api.pexels.com/v1/search?query=${country}&orientation=landscape`;
+
+        try {
+            let res = await fetch(imgUri,
+                {
+                    method: 'GET',
+                    headers: {
+                        Authorization: apiKey,
+                        Accept: 'application/json',
+                    },
+                })
+            res = await res.json();
+            return res.photos[1].src.landscape
+        }
+        catch (err) {
+            console.log("ERROR", err);
+        }
+    }
+
     const handleCountry = (e) => {
         setCountry(e.target.value);
     }
@@ -64,8 +90,10 @@ function DashboardPage(props) {
         setEndDate(e.target.value);
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        const src = await fetchImage(country);
+        console.log(src);
         let sDate = new Date(startDate);
         let eDate = new Date(endDate);
         let difference = eDate - sDate;
@@ -94,6 +122,7 @@ function DashboardPage(props) {
             startDate,
             endDate,
             days,
+            src,
         };
         axios.post(uri, data)
             .then(response => {
@@ -203,7 +232,7 @@ function DashboardPage(props) {
                                     id={trip._id}
                                     component="img"
                                     height="140"
-                                    image={beach}
+                                    image={trip.src}
                                     alt="no image"
                                 />
                                 <CardContent id={trip._id}>

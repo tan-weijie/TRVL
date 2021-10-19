@@ -43,7 +43,7 @@ function ShowTripPage(props) {
 
     useEffect(() => {
         fetchImage();
-    }, [])
+    }, [trip])
 
     const fetchImage = async () => {
         const apiKey = "563492ad6f91700001000001fb4b588e36424f5db5e96fd30f05c911";
