@@ -7,6 +7,7 @@ const tripSchema = new mongoose.Schema(
         startDate: {type: Date, required: true},
         endDate: {type: Date, required: true},
         userId: {type: String},
+        src: {type: String},
         days: [ 
             {
                 date: String,

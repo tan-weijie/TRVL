@@ -22,11 +22,11 @@ const secret = process.env.SECRET;
 
 //verify cookie data with token data, to stay logged in
 app.get('/user', (req,res)=>{
-    const payload = jwt.verify(req.cookies.token,secret)
-    User.findById(payload.id)
-        .then(userInfo =>{
-            res.json({id:userInfo._id,username:userInfo.username,email:userInfo.email})
-        })
+    // const payload = jwt.verify(req.cookies.token,secret)
+    // User.findById(payload.id)
+    //     .then(userInfo =>{
+    //         res.json({id:userInfo._id,username:userInfo.username,email:userInfo.email})
+    //     })
 })
 
 //Sign up

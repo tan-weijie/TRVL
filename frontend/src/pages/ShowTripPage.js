@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useParams } from "react-router-dom";
 import axios from 'axios';
 import Timeline from '../components/Timeline'
-import { touchRippleClasses } from '@mui/material';
+import { touchRippleClasses, Typography } from '@mui/material';
 require('dotenv').config();
 
 
@@ -81,7 +81,7 @@ function ShowTripPage(props) {
 
     return (
         <div>
-            {`${difference + 1} days in ${trip.country}`}
+            <Typography>{difference + 1} days in {trip.country}</Typography>
             {background && <img className="background-image" src={background} />}
             {trip.days ? <Timeline trip={trip}/> : <div>Loading</div>}
         </div>
