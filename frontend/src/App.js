@@ -4,6 +4,8 @@ import Navbar from './components/Navbar';
 import ShowTripPage from './pages/ShowTripPage';
 import DashboardPage from './pages/DashboardPage';
 import RegisterPage from './pages/RegisterPage';
+import LoginForm from './components/LoginForm';
+import SignupForm from './components/SignupForm';
 
 
 function App() {
@@ -12,6 +14,12 @@ function App() {
       
             {/* <Switch> */}
                 <Navbar/>
+                <Route exact path='/login'>
+                    <LoginForm/>
+                </Route>
+                <Route exact path='/signup'>
+                    <SignupForm/>
+                </Route>
                 <Route exact path='/home'>
                     <DashboardPage />
                 </Route>

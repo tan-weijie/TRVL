@@ -2,6 +2,7 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
+const bcrypt = require('bcrypt');
 
 // db
 const connectDB = require('./models/db');
@@ -17,8 +18,22 @@ app.use(express.urlencoded({extended: true}));
 //Sign up
 app.post('/signup', async (req, res) => {
     try {
-        await userModel.create(req.body)
-        res.send("user created")
+        const user = await userModel.find({$or: [{username: req.body.username, email: req.body.email}]})
+        console.log(await user);
+        if (user.length) {
+            res.send('Existing user')
+        } 
+        else {
+            const hashedPassword = await bcrypt.hashSync(req.body.password, 12);
+            const data = await userModel.create(
+                {
+                    username: req.body.username,
+                    email: req.body.email,
+                    password: hashedPassword,
+                }
+            )
+            res.send(data);
+        }
     } catch (err) {
         console.log(err.message);
         return err.message
@@ -26,11 +41,22 @@ app.post('/signup', async (req, res) => {
 })
 
 //Login
-app.get('/login', async (req, res) => {
+app.post('/login', async (req, res) => {
     try {
-        const {username, email, password} = req.body;
-        const data = await userModel.findOne(req.body);
-        res.send(`Welcome ${data.username}`)
+        const {username, password} = req.body;
+        const user = await userModel.findOne({username});
+        console.log(user);
+        if (user){
+            const comparePassword = await bcrypt.compareSync(password, user.password)
+            console.log(comparePassword);
+            if(comparePassword){
+                res.send("logined");
+            } else {
+                res.send('Wrong password')
+            }  
+        } else {
+            return res.send('Invalid username/password');
+        }
     } catch (err) {
         console.log(err.message);
         return err.message;
@@ -90,7 +116,7 @@ app.put('/trip/:id', async (req, res) => {
     }
 })
 
-// Add/Edit activities
+// Add activities
 app.put('/days/:id', async (req, res) => {
     try {
         console.log('params',req.params.id)
@@ -102,7 +128,7 @@ app.put('/days/:id', async (req, res) => {
         console.log({status: 'bad', msg: error.message})
     }
 })
-// Edit activities
+// Edit activities - not working
 app.put('/activities/:id', async (req, res) => {
     try{
         // const data = await tripModel.updateOne({"days.activities._id": req.params.id}, {"$set": {"days.$.activities": req.body}});
