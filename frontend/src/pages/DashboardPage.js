@@ -33,7 +33,8 @@ function DashboardPage(props) {
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [trips, setTrips] = useState(['']);
-    const [refresh, setRefresh] = useState(false)
+    const [refresh, setRefresh] = useState(false);
+    const [alert, setAlert] = useState('');
 
     useEffect(() => {
         fetchTrips();
@@ -94,20 +95,8 @@ function DashboardPage(props) {
         console.log(difference)
         let days = [];
         for (let i = 0; i <= difference; i++) {
-            days.push({ date: new Date(sDate.getTime() + (i*24*60*60*1000)), activities: [] })
+            days.push({ date: new Date(sDate.getTime() + (i * 24 * 60 * 60 * 1000)), activities: [] })
         }
-        // const getDatesBetweenDates = (sDate, eDate) => {
-        //     let dates = []
-        //     //to avoid modifying the original date
-        //     const theDate = new Date(sDate)
-        //     while (theDate < eDate) {
-        //         dates = [...dates, new Date(theDate)]
-        //         theDate.setDate(theDate.getDate() + 1)
-        //     }
-        //     return {dates}
-        // }
-
-        // let dates = getDatesBetweenDates(sDate, eDate);
 
         const data = {
             _id: uuid(),
@@ -117,12 +106,20 @@ function DashboardPage(props) {
             days,
             src,
         };
+        if (!country || !startDate || !endDate) {
+            setAlert('Please enter all fields.')
+            return
+        } else if (endDate < startDate) {
+            setAlert('End Date should not be earlier than Start Date');
+            return
+        }
         axios.post(uri, data)
             .then(response => {
                 console.log('posted', response);
                 setCountry('');
                 setStartDate('');
                 setEndDate('');
+                setAlert('');
                 window.location = (`./trip/${data._id}`)
             })
             .catch(error => {
@@ -150,7 +147,7 @@ function DashboardPage(props) {
 
     return (
         <div>
-            <img style={{width:'100vw', height:'80vh', objectFit:'cover'}} className="dashboard-background" src={beach} />
+            <img style={{ width: '100vw', height: '80vh', objectFit: 'cover' }} className="dashboard-background" src={beach} />
             {/* <Typography>
                 THE WORLD AWAITS
             </Typography> */}
@@ -160,6 +157,7 @@ function DashboardPage(props) {
                         <Typography variant='h5'>
                             Itinerary Planner
                         </Typography>
+                        {alert}
                         <TextField
                             fullWidth margin='normal'
                             id="outlined-basic"
@@ -198,6 +196,7 @@ function DashboardPage(props) {
                     </Box>
                 </form>
             </div>
+            <Typography style={{textAlign: 'center'}} variant='h5'>My Trips ({trips.length})</Typography>
             <Box sx={{
                 display: 'flex',
                 alignItems: 'flex-start',
@@ -207,6 +206,7 @@ function DashboardPage(props) {
                 height: 100,
                 width: '100%'
             }}>
+                
                 {trips.map(trip => {
                     // startDate
                     let sDate = new Date(trip.startDate);

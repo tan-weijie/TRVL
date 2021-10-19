@@ -5,7 +5,6 @@ import Timeline from '../components/Timeline'
 
 // mui
 import { Typography, Box } from '@mui/material';
-import { textAlign } from '@mui/system';
 
 require('dotenv').config();
 
@@ -31,7 +30,6 @@ function ShowTripPage() {
     const uri = "http://localhost:5000/";
     console.log(uri);
 
-
     useEffect(() => {
         fetchTrip();
     }, [])
@@ -49,18 +47,11 @@ function ShowTripPage() {
             })
     }
 
-    let sDate = new Date(trip.startDate);
-    let eDate = new Date(trip.endDate);
-    let difference = eDate - sDate;
-    difference = difference / 1000 / 60 / 60 / 24
-    console.log(eDate)
-    console.log(sDate)
-
     return (
         <div>
             {trip.src && <img style={{ width: '100vw', height: '70vh', objectFit: 'cover' }} className="background-image" src={trip.src} />}
             <Box sx={style}>
-                <Typography variant="h3" style={{textShadow: '3 3 #ff0000', textAlign: 'center'}}>{difference + 1} days in {trip.country}</Typography>
+                {trip.days && <Typography variant="h3" style={{textShadow: '3 3 #ff0000', textAlign: 'center'}}>{trip.days.length} days in {trip.country}</Typography>}
             </Box>
             {trip.days ? <Timeline trip={trip} /> : <div>Loading</div>}
         </div>

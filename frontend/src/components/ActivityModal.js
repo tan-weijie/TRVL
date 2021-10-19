@@ -10,7 +10,6 @@ import Modal from '@mui/material/Modal';
 import { TextField } from '@mui/material';
 import TimePicker from '@mui/lab/TimePicker'
 import { Input } from '@mui/material';
-import uuid from 'react-uuid';
 
 
 const style = {
@@ -35,6 +34,7 @@ export default function ActivityModal (props) {
     const [startTime, setStartTime] = useState('');
     const [endTime, setEndTime] = useState('');
     const [transport, setTransport] = useState('');
+    const [alert, setAlert] = useState('');
 
     const handleName = (e) => {
         setName(e.target.value)
@@ -66,6 +66,13 @@ export default function ActivityModal (props) {
             transport
         }
         console.log(data);
+        if (!name || !location || !startTime || !endTime || !transport){
+            setAlert('Please enter all fields');
+            return
+        } else if (endTime < startTime){
+            setAlert('End Time should not be earlier than Start Time');
+            return
+        } 
         axios.put(`http://localhost:5000/days/${props.id}`, data)
         .then(response =>{
             console.log('updated', response);
@@ -75,6 +82,7 @@ export default function ActivityModal (props) {
             setStartTime('');
             setEndTime('');
             setTransport('');
+            setAlert('')
             window.location.href = `./${props.trip._id}`
         }) 
         .catch(error =>{
@@ -92,7 +100,8 @@ export default function ActivityModal (props) {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
-                    <Typography>Date</Typography>
+                    <Typography variant="h5">New Activity</Typography>
+                    {alert}
                     <TextField 
                         fullWidth margin='normal' 
                         id="outlined-basic" 
