@@ -1,16 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useParams } from "react-router-dom";
 import axios from 'axios';
+import { Link, useParams } from "react-router-dom";
 import Timeline from '../components/Timeline'
-import { touchRippleClasses, Typography } from '@mui/material';
+
+// mui
+import { Typography, Box } from '@mui/material';
+import { textAlign } from '@mui/system';
+
 require('dotenv').config();
 
+const style = {
+    position: 'absolute',
+    top: '40%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    color: 'white',
+    boxShadow: 24,
+    p: 4,
+};
 
-// have to import timeline component
+function ShowTripPage() {
 
-function ShowTripPage(props) {
-
-    const [background, setBackground] = useState('');
     const [trip, setTrip] = useState(['']);
     const { id } = useParams();
 
@@ -38,52 +49,20 @@ function ShowTripPage(props) {
             })
     }
 
-    // pexels API
-
-
-    useEffect(() => {
-        fetchImage();
-    }, [trip])
-
-    const fetchImage = async () => {
-        const apiKey = "563492ad6f91700001000001fb4b588e36424f5db5e96fd30f05c911";
-        const imgUri = `https://api.pexels.com/v1/search?query=${trip.country}&orientation=landscape`;
-
-        try {
-            let res = await fetch(imgUri,
-                {
-                    method: 'GET',
-                    headers: {
-                        Authorization: apiKey,
-                        Accept: 'application/json',
-                    },
-                })
-            res = await res.json();
-            let i = Math.floor(Math.random() * 15)
-            console.log(trip.country);
-            console.log(res.photos[i])
-            setBackground(res.photos[1].src.landscape)
-        }
-        catch (err) {
-            console.log("ERROR", err);
-        }
-    }
-
-    console.log('background',background)
-
     let sDate = new Date(trip.startDate);
     let eDate = new Date(trip.endDate);
     let difference = eDate - sDate;
     difference = difference / 1000 / 60 / 60 / 24
     console.log(eDate)
     console.log(sDate)
-  
 
     return (
         <div>
-            <Typography>{difference + 1} days in {trip.country}</Typography>
-            {background && <img className="background-image" src={background} />}
-            {trip.days ? <Timeline trip={trip}/> : <div>Loading</div>}
+            {trip.src && <img style={{ width: '100vw', height: '70vh', objectFit: 'cover' }} className="background-image" src={trip.src} />}
+            <Box sx={style}>
+                <Typography variant="h3" style={{textShadow: '3 3 #ff0000', textAlign: 'center'}}>{difference + 1} days in {trip.country}</Typography>
+            </Box>
+            {trip.days ? <Timeline trip={trip} /> : <div>Loading</div>}
         </div>
     )
 

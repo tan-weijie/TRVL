@@ -41,8 +41,6 @@ export default function CustomizedTimeline(props) {
     let difference = eDate - sDate;
     difference = difference / 1000 / 60 / 60 / 24;
 
-    console.log(props.trip)
-
     const uri = "http://localhost:5000/activities/"
 
     const handleDelete = (e) => {
@@ -65,6 +63,7 @@ export default function CustomizedTimeline(props) {
     return (
         <Timeline>
             {props.trip.days.map((day, index) => {
+                let date = new Date(day.date);
                 if (index == 0) {
                     return (
                         <>
@@ -79,7 +78,7 @@ export default function CustomizedTimeline(props) {
                                 </TimelineOppositeContent>
                                 <TimelineSeparator>
                                     <TimelineConnector />
-                                    <Chip label={sDate.toLocaleDateString('en-AU')} />
+                                    <Chip label={date.toLocaleDateString('en-AU')} />
                                     <TimelineConnector />
                                 </TimelineSeparator>
                                 <TimelineContent sx={{ py: '12px', px: 2 }}>
@@ -124,7 +123,7 @@ export default function CustomizedTimeline(props) {
                                 </TimelineOppositeContent>
                                 <TimelineSeparator>
                                     <TimelineConnector />
-                                    <Chip label={eDate.toLocaleDateString('en-AU')} />
+                                    <Chip label={date.toLocaleDateString('en-AU')} />
                                     <TimelineConnector />
                                 </TimelineSeparator>
                                 <TimelineContent sx={{ py: '12px', px: 2 }}>
@@ -169,7 +168,7 @@ export default function CustomizedTimeline(props) {
                                 </TimelineOppositeContent>
                                 <TimelineSeparator>
                                     <TimelineConnector />
-                                    <Chip label={sDate.toLocaleDateString('en-AU')} />
+                                    <Chip label={date.toLocaleDateString('en-AU')} />
                                     <TimelineConnector />
                                 </TimelineSeparator>
                                 <TimelineContent sx={{ py: '12px', px: 2 }}>

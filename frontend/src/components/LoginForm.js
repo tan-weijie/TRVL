@@ -38,11 +38,12 @@ function LoginForm() {
         console.log(data);
         axios.post('http://localhost:5000/login', data)
         .then(res => {
-            if(res.data == "logined"){
+            if(res.data.user){
                 window.location.href = "./home";
-            } else 
+            } else {
                 console.log(res.data);
                 setAlert(res.data);
+            }
         })
         .catch (err=>{
             console.log(err.message);

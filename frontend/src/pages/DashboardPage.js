@@ -29,8 +29,6 @@ function DashboardPage(props) {
     const uri = "http://localhost:5000/"
     const beach = "https://images.pexels.com/photos/1705254/pexels-photo-1705254.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200";
 
-
-    const [background, setBackground] = useState('');
     const [country, setCountry] = useState('');
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
@@ -51,11 +49,6 @@ function DashboardPage(props) {
                 console.log(error.message)
             })
     }
-
-    // fetch image
-    // useEffect(() => {
-    //     fetchImage();
-    // }, [trips])
 
     const fetchImage = async (country) => {
         const apiKey = "563492ad6f91700001000001fb4b588e36424f5db5e96fd30f05c911";
@@ -101,7 +94,7 @@ function DashboardPage(props) {
         console.log(difference)
         let days = [];
         for (let i = 0; i <= difference; i++) {
-            days.push({ date: i, activities: [] })
+            days.push({ date: new Date(sDate.getTime() + (i*24*60*60*1000)), activities: [] })
         }
         // const getDatesBetweenDates = (sDate, eDate) => {
         //     let dates = []
@@ -157,7 +150,7 @@ function DashboardPage(props) {
 
     return (
         <div>
-            <img style={{width:'100vw', height:'80vh', backgroundSize:'cover'}} className="dashboard-background" src={beach} />
+            <img style={{width:'100vw', height:'80vh', objectFit:'cover'}} className="dashboard-background" src={beach} />
             {/* <Typography>
                 THE WORLD AWAITS
             </Typography> */}

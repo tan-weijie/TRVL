@@ -4,6 +4,7 @@ const app = express();
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const cookieParser = require("cookie-parser")
 require('dotenv').config()
 
 
@@ -17,19 +18,27 @@ connectDB()
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+app.use(cookieParser())
 
 const secret = process.env.SECRET;
 
-//verify cookie data with token data, to stay logged in
-app.get('/user', (req,res)=>{
-    // const payload = jwt.verify(req.cookies.token,secret)
-    // User.findById(payload.id)
-    //     .then(userInfo =>{
-    //         res.json({id:userInfo._id,username:userInfo.username,email:userInfo.email})
-    //     })
+//find user with cookie token
+app.get('/user', async (req,res)=>{
+    try {
+        const payload = await jwt.verify(req.cookies.token, secret)
+        const currentUser = await userModel.findOne(
+            {
+                username: payload.user.username
+            }
+        )
+        res.json(currentUser);
+    } catch(err){
+        console.log('get user route', err.message)
+        res.send(err.message);
+    }
 })
 
-//Sign up
+// Sign up
 app.post('/signup', async (req, res) => {
     try {
         const user = await userModel.find({$or: [{username: req.body.username, email: req.body.email}]})
@@ -54,21 +63,32 @@ app.post('/signup', async (req, res) => {
     }
 })
 
-//Login
+// Login
 app.post('/login', async (req, res) => {
     try {
         const {username, password} = req.body;
         const user = await userModel.findOne({username});
         console.log(user);
         if (user){
-            const comparePassword = await bcrypt.compareSync(password, user.password)
+            const matched = await bcrypt.compareSync(password, user.password)
             // console.log(comparePassword);
-            if(comparePassword){
-                const accessToken = jwt.sign({user}, secret)
-                // console.log(accessToken)
-                res.send("logined");
+            if(matched){
+                await jwt.sign({user}, secret, {expiresIn: 3600}, (err, token) => {
+                    if(err) throw err;
+                    // stores token in http cookie headers
+                    res.cookie('token', token).json(
+                        {
+                            // returns token with user details
+                            user: {
+                                id: user.id,
+                                name: user.name,
+                                email: user.email,
+                            }
+                        }
+                    )
+                }) 
             } else {
-                res.send('Wrong password')
+                return res.send('Wrong password')
             }  
         } else {
             return res.send('Invalid username/password');
@@ -77,6 +97,11 @@ app.post('/login', async (req, res) => {
         console.log(err.message);
         return err.message;
     }
+})
+
+// Logout
+app.post('/logout', (req, res) => {
+    res.cookie('token', '').send('logged out');
 })
 
 function authToken(req, res, next) {
@@ -104,7 +129,7 @@ app.post('/logout',(req,res)=>{
 
 // Get all trips
 app.get('/', async (req, res) => {
-    console.log(req.user);
+    // console.log(req.user);
     try {
         const data = await tripModel.find(req.user);
         res.send(data);
