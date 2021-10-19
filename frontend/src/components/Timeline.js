@@ -206,6 +206,9 @@ export default function CustomizedTimeline(props) {
                                                 Activity: {element.name}
                                             </Typography>
                                             <Typography>
+                                                Location: {element.location}
+                                            </Typography>
+                                            <Typography>
                                                 Time: {element.startTime}H - {element.endTime}H
                                             </Typography>
                                             <Typography>

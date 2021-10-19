@@ -31,12 +31,17 @@ export default function ActivityModal (props) {
     const handleClose = () => setOpen(false);
 
     const [name, setName] = useState('');
+    const [location, setLocation] = useState('');
     const [startTime, setStartTime] = useState('');
     const [endTime, setEndTime] = useState('');
     const [transport, setTransport] = useState('');
 
     const handleName = (e) => {
         setName(e.target.value)
+    }
+
+    const handleLocation = (e) => {
+        setLocation(e.target.value)
     }
 
     const handleStartTime = (e) => {
@@ -55,6 +60,7 @@ export default function ActivityModal (props) {
         e.preventDefault();
         let data = {
             name,
+            location,
             startTime,
             endTime,
             transport
@@ -65,6 +71,7 @@ export default function ActivityModal (props) {
             console.log('updated', response);
             setOpen(false);
             setName('');
+            setLocation('');
             setStartTime('');
             setEndTime('');
             setTransport('');
@@ -96,6 +103,17 @@ export default function ActivityModal (props) {
                         }}
                         onChange={handleName}
                         value={name} 
+                    />
+                    <TextField 
+                        fullWidth margin='normal' 
+                        id="outlined-basic" 
+                        label="Location" 
+                        variant="outlined" 
+                        InputLabelProps={{
+                        shrink: true,
+                        }}
+                        onChange={handleLocation}
+                        value={location} 
                     />
                     <TextField 
                         fullWidth margin='normal' 

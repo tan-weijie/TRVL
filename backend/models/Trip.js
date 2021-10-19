@@ -13,6 +13,7 @@ const tripSchema = new mongoose.Schema(
                 activities: [
                     {
                         name: {type: String,},
+                        location: String,
                         startTime: String,
                         endTime: String,
                         transport: String

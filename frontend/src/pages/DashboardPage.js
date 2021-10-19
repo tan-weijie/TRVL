@@ -20,10 +20,11 @@ function DashboardPage(props) {
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [trips, setTrips] = useState(['']);
+    const [refresh, setRefresh] = useState(false)
 
     useEffect(() => {
         fetchTrips();
-    }, [])
+    }, [refresh])
 
     const fetchTrips = () => {
         axios.get(uri)
@@ -100,10 +101,10 @@ function DashboardPage(props) {
     const handleDelete = (e) => {
         e.preventDefault();
         console.log(e.target.id)
-        axios.delete(uri + e.target.id)
+        axios.delete(uri + `trip/${e.target.id}`)
         .then(response => {
             console.log('deleted');
-            window.location = ('./home')
+            setRefresh(!refresh)
         })
         .catch(error => {
             console.log(error.message)
