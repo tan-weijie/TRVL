@@ -19,6 +19,7 @@ const style = {
 function LoginForm() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [alert, setAlert] = useState('');
 
     const handleUsername = (e) => {
         setUsername(e.target.value)
@@ -41,6 +42,7 @@ function LoginForm() {
                 window.location.href = "./home";
             } else 
                 console.log(res.data);
+                setAlert(res.data);
         })
         .catch (err=>{
             console.log(err.message);
@@ -52,6 +54,7 @@ function LoginForm() {
             <Typography variant="h5">
                 Login to TRVL
             </Typography>
+            {alert}
             <TextField
                 fullWidth margin='normal'
                 id="outlined-basic"

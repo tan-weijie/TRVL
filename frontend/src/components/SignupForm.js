@@ -20,6 +20,7 @@ function SignupForm() {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [alert, setAlert] = useState('');
 
     const handleUsername = (e) => {
         setUsername(e.target.value)
@@ -43,16 +44,21 @@ function SignupForm() {
         console.log(data);
         if (!email.includes('@')) {
             console.log('Invalid email');
+            setAlert('Invalid email.')
         } else if (password.length < 8) {
             console.log('Password too short. (Minimum 8 characters)')
+            setAlert('Password too short. (Minimum 8 characters)')
         } else {
             axios.post('http://localhost:5000/signup', data)
                 .then(res => {
-                    console.log(res.data);
-                    // if (res.data == "logined") {
-                    //     window.location.href = "./home";
-                    // } else
-                    //     console.log(res.data);
+                    console.log('res',res.data);
+                    if (res.data == "Existing user or email.") {
+                        setAlert(res.data);
+                    } else {
+                        console.log(res.data);
+                        setAlert('');
+                        window.location.href = './login';
+                    }
                 })
                 .catch(err => {
                     console.log('err', err.message);
@@ -65,6 +71,7 @@ function SignupForm() {
             <Typography variant="h5">
                 Signup New Account
             </Typography>
+            {alert}
             <TextField
                 fullWidth margin='normal'
                 id="outlined-basic"

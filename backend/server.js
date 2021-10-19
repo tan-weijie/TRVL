@@ -3,6 +3,9 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+require('dotenv').config()
+
 
 // db
 const connectDB = require('./models/db');
@@ -14,6 +17,17 @@ connectDB()
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+
+const secret = process.env.SECRET;
+
+//verify cookie data with token data, to stay logged in
+app.get('/user', (req,res)=>{
+    const payload = jwt.verify(req.cookies.token,secret)
+    User.findById(payload.id)
+        .then(userInfo =>{
+            res.json({id:userInfo._id,username:userInfo.username,email:userInfo.email})
+        })
+})
 
 //Sign up
 app.post('/signup', async (req, res) => {
@@ -48,8 +62,10 @@ app.post('/login', async (req, res) => {
         console.log(user);
         if (user){
             const comparePassword = await bcrypt.compareSync(password, user.password)
-            console.log(comparePassword);
+            // console.log(comparePassword);
             if(comparePassword){
+                const accessToken = jwt.sign({user}, secret)
+                // console.log(accessToken)
                 res.send("logined");
             } else {
                 res.send('Wrong password')
@@ -63,12 +79,34 @@ app.post('/login', async (req, res) => {
     }
 })
 
+function authToken(req, res, next) {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+    console.log('token',token);
+    if (token == null) {
+        return res.send('User not authed');
+    }
+    jwt.verify(token, secret, (err, user) => {
+        if (err) {
+            return res.send('jwt error');
+        }
+        req.user = user;
+        next();
+    })
+}
+
+//Logout
+app.post('/logout',(req,res)=>{
+    res.cookie('token','').send()
+})
+
 ///////////////////////////////////////////////////////
 
 // Get all trips
 app.get('/', async (req, res) => {
+    console.log(req.user);
     try {
-        const data = await tripModel.find();
+        const data = await tripModel.find(req.user);
         res.send(data);
     } catch (error) {
         console.log({status: 'bad', msg: error.message});

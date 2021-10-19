@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
 import AirplaneTicketIcon from '@mui/icons-material/AirplaneTicket';
 
-export default function Navbar() {
+export default function Navbar(props) {
 
     return (
         <Box sx={{ flexGrow: 1 }}>
@@ -19,7 +19,7 @@ export default function Navbar() {
                             TRVL
                         </Link>
                     </Typography>
-                    <Button color="inherit">Login</Button>
+                    {props.user && <Button color="inherit">{props.user}</Button>}
                 </Toolbar>
             </AppBar>
         </Box>
