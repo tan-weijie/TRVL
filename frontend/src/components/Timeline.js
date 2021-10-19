@@ -43,10 +43,6 @@ export default function CustomizedTimeline(props) {
 
     console.log(props.trip)
 
-    const handleAmend = (e) => {
-
-
-    }
     const uri = "http://localhost:5000/activities/"
 
     const handleDelete = (e) => {

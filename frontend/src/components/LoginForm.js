@@ -78,8 +78,9 @@ function LoginForm() {
             <Button onClick={handleSubmit}>
                 Login
             </Button>
+            <br/>
             <Button href="./signup">
-                Register
+                signup
             </Button>
         </Box>
     )

@@ -21,7 +21,7 @@ app.post('/signup', async (req, res) => {
         const user = await userModel.find({$or: [{username: req.body.username, email: req.body.email}]})
         console.log(await user);
         if (user.length) {
-            res.send('Existing user')
+            res.send('Existing user or email.')
         } 
         else {
             const hashedPassword = await bcrypt.hashSync(req.body.password, 12);
@@ -36,7 +36,7 @@ app.post('/signup', async (req, res) => {
         }
     } catch (err) {
         console.log(err.message);
-        return err.message
+        res.send('Existing user or email.');
     }
 })
 
