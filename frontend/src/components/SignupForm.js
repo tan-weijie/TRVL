@@ -16,6 +16,8 @@ const style = {
     p: 4,
 };
 
+const uri = process.env.REACT_APP_SERVERURI;
+
 function SignupForm() {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
@@ -52,7 +54,7 @@ function SignupForm() {
             setAlert('Password too short. (Minimum 8 characters)')
             return
         }
-        axios.post('http://localhost:5000/signup', data)
+        axios.post(uri + 'signup', data)
             .then(res => {
                 console.log('res', res.data);
                 if (res.data == "Existing user or email.") {

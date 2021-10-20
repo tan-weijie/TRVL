@@ -1,10 +1,11 @@
 import React, { useState, useEffect, createContext } from 'react';
+import { BrowserRouter, Route } from 'react-router-dom'
 import axios from 'axios';
-import { BrowserRouter, Route, Link, Switch } from 'react-router-dom'
+
+// components && pages
 import Navbar from './components/Navbar';
 import ShowTripPage from './pages/ShowTripPage';
 import DashboardPage from './pages/DashboardPage';
-import RegisterPage from './pages/RegisterPage';
 import LoginForm from './components/LoginForm';
 import SignupForm from './components/SignupForm';
 
@@ -15,17 +16,14 @@ function App() {
 
     const [userInfo, setUserInfo] = useState('');
 
+    const uri = process.env.REACT_APP_SERVERURI;
+
     useEffect(()=>{
-        axios.get("http://localhost:5000/user", {withCredentials:true})
+        axios.get(uri + 'user', {withCredentials:true})
         .then(response =>{
-            // console.log(response)
-            console.log(response.data.user)
             setUserInfo(response.data.user)
-            // setEmail(response.data.email)    
         })
     },[])
-
-
 
     return (
         <BrowserRouter>

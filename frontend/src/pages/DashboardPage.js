@@ -7,6 +7,7 @@ import "./dashboard.css";
 // mui
 import { Box } from '@mui/system';
 import { Alert, Button, Card, CardContent, CardMedia, CardActionArea, CardActions, Divider, Typography, TextField } from '@mui/material';
+import { Delete } from '@mui/icons-material';
 
 // Box style
 const style = {
@@ -41,7 +42,6 @@ function DashboardPage(props) {
     const fetchTrips = () => {
         user && axios.get(uri + `trips/${user._id}`)
             .then(response => {
-                console.log('THIS IS RETURNED', response.data);
                 setTrips(response.data);
             })
             .catch(error => {
@@ -158,7 +158,7 @@ function DashboardPage(props) {
             <div>
                 <form className='center' onSubmit={handleSubmit}>
                     <Box sx={style}>
-                        <Typography variant='h5'>
+                        <Typography style={{ margin: 10 }} variant='h5'>
                             Itinerary Planner
                         </Typography>
                         {alert && <Alert severity="error">{alert}</Alert>}
@@ -196,7 +196,7 @@ function DashboardPage(props) {
                             onChange={handleEndDate}
                             type="date"
                             value={endDate} />
-                        <Button type="submit">Add</Button>
+                        <Button style={{ margin: 10 }} variant="outlined" type="submit">Add</Button>
                     </Box>
                 </form>
             </div>
@@ -244,7 +244,7 @@ function DashboardPage(props) {
                                     </CardContent>
                                 </CardActionArea>
                                 <CardActions>
-                                    <Button onClick={handleDelete} id={trip._id} size="small" color="primary">
+                                    <Button startIcon={<Delete />} onClick={handleDelete} id={trip._id} size="small" color="primary">
                                         Delete
                                     </Button>
                                 </CardActions>

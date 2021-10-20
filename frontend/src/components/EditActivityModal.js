@@ -4,7 +4,8 @@ import axios from 'axios';
 
 // mui
 import { Box, Button, Typography, Modal, TextField, Alert } from '@mui/material';
-
+import { IconButton } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
 
 
 const style = {
@@ -20,6 +21,9 @@ const style = {
 };
 
 export default function EditActivityModal (props) {
+    
+    const uri = process.env.REACT_APP_SERVERURI;
+
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -69,7 +73,7 @@ export default function EditActivityModal (props) {
             setAlert('End Time should not be earlier than Start Time');
             return
         } 
-        axios.put(`http://localhost:5000/activities/${props.activity._id}`, data)
+        axios.put(uri + `activities/${props.activity._id}`, data)
         .then(response =>{
             console.log('updated', response);
             setOpen(false);
@@ -81,8 +85,10 @@ export default function EditActivityModal (props) {
     }
 
     return (
-        <div>
-            <Button onClick={handleOpen}>EDIT</Button>
+        <div style={{display: 'inline', float: 'right'}}>
+            <Button size='small' startIcon={<EditIcon/>} color='primary' onClick={handleOpen}>
+                EDIT
+            </Button>
             <Modal
                 open={open}
                 onClose={handleClose}

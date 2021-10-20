@@ -4,7 +4,7 @@ import axios from 'axios';
 
 // mui
 import { Box, Button, Typography, Modal, TextField, Alert } from '@mui/material';
-
+import AddIcon from '@mui/icons-material/Add';
 
 
 const style = {
@@ -68,7 +68,8 @@ export default function ActivityModal (props) {
             setAlert('End Time should not be earlier than Start Time');
             return
         } 
-        axios.put(`http://localhost:5000/days/${props.id}`, data)
+        const uri = process.env.REACT_APP_SERVERURI;
+        axios.put(uri + `days/${props.id}`, data)
         .then(response =>{
             console.log('updated', response);
             setOpen(false);
@@ -87,7 +88,7 @@ export default function ActivityModal (props) {
 
     return (
         <div>
-            <Button onClick={handleOpen}>+</Button>
+            <Button size='big' startIcon={<AddIcon/>} onClick={handleOpen}>Add</Button>
             <Modal
                 open={open}
                 onClose={handleClose}

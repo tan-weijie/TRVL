@@ -12,11 +12,10 @@ import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
 import AirplaneTicketIcon from '@mui/icons-material/AirplaneTicket';
 
-require('dotenv').config();
 
 export default function Navbar() {
-    // const uri = process.env.SERVERURI;
-    const uri = 'http://localhost:5000/'
+
+    const uri = process.env.REACT_APP_SERVERURI;
     const user = useContext(User);
     
     const handleLogin = (e) => {

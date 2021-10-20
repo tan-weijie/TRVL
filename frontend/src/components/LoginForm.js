@@ -5,6 +5,7 @@ import axios from 'axios';
 import { Button, TextField, Typography, Alert } from '@mui/material'
 import { Box } from '@mui/system'
 
+const uri = process.env.REACT_APP_SERVERURI;
 
 const style = {
     position: 'absolute',
@@ -43,7 +44,7 @@ function LoginForm() {
         }
         console.log(data);
         // headers are important else cookies unable to set
-        axios.post('http://localhost:5000/login', data, { withCredentials: true, credentials: 'include' })
+        axios.post(uri + 'login', data, { withCredentials: true, credentials: 'include' })
             .then(res => {
                 if (res.data.user) {
                     setAlert('');

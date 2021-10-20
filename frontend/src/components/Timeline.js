@@ -1,6 +1,7 @@
 import * as React from 'react';
 import axios from 'axios';
 import ActivityModal from './ActivityModal'
+import EditActivityModal from './EditActivityModal';
 
 // mui
 import { Chip, Typography, Button } from '@mui/material';
@@ -8,7 +9,8 @@ import { Timeline, TimelineItem, TimelineSeparator, TimelineConnector, TimelineC
 import FlightIcon from '@mui/icons-material/Flight';
 import ExploreIcon from '@mui/icons-material/Explore';
 import { Box } from '@mui/system';
-import EditActivityModal from './EditActivityModal';
+import { Delete } from '@mui/icons-material';
+
 
 
 const style = {
@@ -30,12 +32,12 @@ export default function CustomizedTimeline(props) {
     let difference = eDate - sDate;
     difference = difference / 1000 / 60 / 60 / 24;
 
-    const uri = "http://localhost:5000/activities/"
+    const uri = process.env.REACT_APP_SERVERURI;
 
     const handleDelete = (e) => {
         console.log(e.target.id);
         e.preventDefault();
-        axios.delete(uri + e.target.id)
+        axios.delete(uri + 'activities/' + e.target.id)
             .then(res => {
                 console.log(res);
                 window.location.href = `./${props.trip._id}`;
@@ -175,13 +177,13 @@ export default function CustomizedTimeline(props) {
                                         </TimelineOppositeContent>
                                         <TimelineSeparator>
                                             <TimelineConnector />
-                                            <TimelineDot>
+                                            <TimelineDot color='primary'>
                                                 <ExploreIcon />
                                             </TimelineDot>
                                             <TimelineConnector />
                                         </TimelineSeparator>
                                         <TimelineContent sx={{ py: '12px' }}>
-                                            <Box sx={{ width: 300, p: 2, border: '1px solid grey', boxShadow: '0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22)' }}>
+                                            <Box sx={{ width: 300, height: 'auto', p: 2, border: '1px solid grey', boxShadow: '0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22)', flexGrow: 1 }}>
                                                 <Typography variant="h6" component="span">
                                                     Activity: {element.name}
                                                 </Typography>
@@ -194,11 +196,13 @@ export default function CustomizedTimeline(props) {
                                                 <Typography>
                                                     Transport: {element.transport}
                                                 </Typography>
-                                                <Button id={element._id}
-                                                    onClick={(handleDelete)}>
-                                                    DEL
-                                                </Button>
-                                                <EditActivityModal activity={element} trip={props.trip}/>
+                                                <div style={{ display: 'inline' }}>
+                                                    <Button size='small' startIcon={<Delete />} color="primary" id={element._id}
+                                                        onClick={(handleDelete)}>
+                                                        DEL
+                                                    </Button>
+                                                </div>
+                                                <EditActivityModal style={{ display: 'inline' }} activity={element} trip={props.trip} />
                                             </Box>
                                         </TimelineContent>
                                     </TimelineItem>

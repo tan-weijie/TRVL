@@ -24,11 +24,7 @@ function ShowTripPage() {
     const [trip, setTrip] = useState(['']);
     const { id } = useParams();
 
-    console.log(id);
-
-    // const uri = process.env.URI;
-    const uri = "http://localhost:5000/";
-    console.log(uri);
+    const uri = process.env.REACT_APP_SERVERURI;
 
     useEffect(() => {
         fetchTrip();
