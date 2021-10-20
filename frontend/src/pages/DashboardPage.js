@@ -1,16 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import uuid from 'react-uuid';
 import axios from 'axios';
-// import "./dashboard.css";
+import { User } from '../App';
+import "./dashboard.css";
 
 // mui
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
-import { Divider, TextField } from '@mui/material';
 import { Box } from '@mui/system';
-import { Button, CardActionArea, CardActions } from '@mui/material';
+import { Alert, Button, Card, CardContent, CardMedia, CardActionArea, CardActions, Divider, Typography, TextField } from '@mui/material';
 
 // Box style
 const style = {
@@ -20,28 +16,30 @@ const style = {
     transform: 'translate(-50%, -50%)',
     width: 400,
     bgcolor: 'white',
-    border: '2px solid #000',
-    boxShadow: 24,
+    boxShadow: '0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22)',
     p: 4,
 };
 
 function DashboardPage(props) {
     const uri = "http://localhost:5000/"
     const beach = "https://images.pexels.com/photos/1705254/pexels-photo-1705254.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200";
+    
+    const user = useContext(User);
 
     const [country, setCountry] = useState('');
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
-    const [trips, setTrips] = useState(['']);
+    const [trips, setTrips] = useState([]);
     const [refresh, setRefresh] = useState(false);
     const [alert, setAlert] = useState('');
 
     useEffect(() => {
         fetchTrips();
-    }, [refresh])
+    }, [user, refresh])
+
 
     const fetchTrips = () => {
-        axios.get(uri)
+        user && axios.get(uri + `trips/${user._id}`)
             .then(response => {
                 console.log('THIS IS RETURNED', response.data);
                 setTrips(response.data);
@@ -86,6 +84,17 @@ function DashboardPage(props) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!user){
+            setAlert('Please login.')
+            return
+        }
+        if (!country || !startDate || !endDate) {
+            setAlert('Please enter all fields.')
+            return
+        } else if (endDate < startDate) {
+            setAlert('End date should not be earlier than start date.');
+            return
+        }
         const src = await fetchImage(country);
         console.log(src);
         let sDate = new Date(startDate);
@@ -105,14 +114,9 @@ function DashboardPage(props) {
             endDate,
             days,
             src,
+            userId: user
         };
-        if (!country || !startDate || !endDate) {
-            setAlert('Please enter all fields.')
-            return
-        } else if (endDate < startDate) {
-            setAlert('End Date should not be earlier than Start Date');
-            return
-        }
+        
         axios.post(uri, data)
             .then(response => {
                 console.log('posted', response);
@@ -157,7 +161,7 @@ function DashboardPage(props) {
                         <Typography variant='h5'>
                             Itinerary Planner
                         </Typography>
-                        {alert}
+                        {alert && <Alert severity="error">{alert}</Alert>}
                         <TextField
                             fullWidth margin='normal'
                             id="outlined-basic"
@@ -205,7 +209,7 @@ function DashboardPage(props) {
                 p: 1,
                 m: 1,
                 bgcolor: 'background.paper',
-                height: 100,
+                // height: 100,
                 width: '100%'
             }}>
                 

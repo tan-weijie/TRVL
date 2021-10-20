@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import axios from 'axios';
-import { Button, TextField, Typography } from '@mui/material'
+
+// mui
+import { Button, TextField, Typography, Alert } from '@mui/material'
 import { Box } from '@mui/system'
 
 
@@ -12,7 +14,7 @@ const style = {
     width: 400,
     bgcolor: 'background.paper',
     border: '2px solid #000',
-    boxShadow: 24,
+    boxShadow: '0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22)',
     p: 4,
 };
 
@@ -32,22 +34,28 @@ function LoginForm() {
     const handleSubmit = (e) => {
         e.preventDefault();
         let data = {
-            username, 
+            username,
             password
         };
+        if (!username || !password) {
+            setAlert('Please input all fields.');
+            return
+        }
         console.log(data);
-        axios.post('http://localhost:5000/login', data, {withCredentials: true, credentials: 'include'})
-        .then(res => {
-            if(res.data.user){
-                window.location.href = "./home";
-            } else {
-                console.log(res.data);
-                setAlert(res.data);
-            }
-        })
-        .catch (err=>{
-            console.log(err.message);
-        })
+        // headers are important else cookies unable to set
+        axios.post('http://localhost:5000/login', data, { withCredentials: true, credentials: 'include' })
+            .then(res => {
+                if (res.data.user) {
+                    setAlert('');
+                    window.location.href = "./home";
+                } else {
+                    console.log(res.data);
+                    setAlert(res.data);
+                }
+            })
+            .catch(err => {
+                console.log(err.message);
+            })
     }
 
     return (
@@ -55,7 +63,8 @@ function LoginForm() {
             <Typography variant="h5">
                 Login to TRVL
             </Typography>
-            {alert}
+            {alert && <Alert severity="error">{alert}</Alert>}
+
             <TextField
                 fullWidth margin='normal'
                 id="outlined-basic"
@@ -82,9 +91,9 @@ function LoginForm() {
             <Button onClick={handleSubmit}>
                 Login
             </Button>
-            <br/>
+            <br />
             <Button href="./signup">
-                signup
+                Register New User
             </Button>
         </Box>
     )

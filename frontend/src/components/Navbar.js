@@ -1,4 +1,9 @@
 import * as React from 'react';
+import { useContext } from 'react';
+import { User } from '../App';
+import axios from 'axios';
+
+// mui
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -7,8 +12,25 @@ import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
 import AirplaneTicketIcon from '@mui/icons-material/AirplaneTicket';
 
-export default function Navbar(props) {
+require('dotenv').config();
 
+export default function Navbar() {
+    // const uri = process.env.SERVERURI;
+    const uri = 'http://localhost:5000/'
+    const user = useContext(User);
+    
+    const handleLogin = (e) => {
+        e.preventDefault();
+        window.location.href = '../login'
+    }
+
+    const handleLogOut = () => {
+        axios.post(uri + 'logout',{}, {withCredentials:true, credentials: 'include'})
+        .then(response=>{
+            console.log(response);
+            window.location.href = '../login'
+        })
+    }
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar style={{ backgroundColor: 'black' }} position="static">
@@ -19,7 +41,8 @@ export default function Navbar(props) {
                             TRVL
                         </Link>
                     </Typography>
-                    {props.user && <Button color="inherit">{props.user}</Button>}
+                    {user && <Button color="inherit">{user.username}</Button>}
+                    {user ? <Button onClick={handleLogOut} color="inherit">Logout</Button> : <Button onClick={handleLogin} color="inherit">Login</Button>}
                 </Toolbar>
             </AppBar>
         </Box>

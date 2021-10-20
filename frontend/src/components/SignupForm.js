@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import axios from 'axios';
-import { Button, TextField, Typography } from '@mui/material'
+import { Button, TextField, Typography, Alert } from '@mui/material'
 import { Box } from '@mui/system'
 
 
@@ -12,7 +12,7 @@ const style = {
     width: 400,
     bgcolor: 'background.paper',
     border: '2px solid #000',
-    boxShadow: 24,
+    boxShadow: '0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22)',
     p: 4,
 };
 
@@ -42,28 +42,31 @@ function SignupForm() {
             password
         };
         console.log(data);
-        if (!email.includes('@')) {
-            console.log('Invalid email');
+        if (!username || !email || !password) {
+            setAlert('Please enter all fields.')
+            return
+        } else if (!email.includes('@')) {
             setAlert('Invalid email.')
+            return
         } else if (password.length < 8) {
-            console.log('Password too short. (Minimum 8 characters)')
             setAlert('Password too short. (Minimum 8 characters)')
-        } else {
-            axios.post('http://localhost:5000/signup', data)
-                .then(res => {
-                    console.log('res',res.data);
-                    if (res.data == "Existing user or email.") {
-                        setAlert(res.data);
-                    } else {
-                        console.log(res.data);
-                        setAlert('');
-                        window.location.href = './login';
-                    }
-                })
-                .catch(err => {
-                    console.log('err', err.message);
-                })
+            return
         }
+        axios.post('http://localhost:5000/signup', data)
+            .then(res => {
+                console.log('res', res.data);
+                if (res.data == "Existing user or email.") {
+                    setAlert(res.data);
+                } else {
+                    console.log(res.data);
+                    setAlert('');
+                    window.location.href = './login';
+                }
+            })
+            .catch(err => {
+                console.log('err', err.message);
+            })
+
 
     }
     return (
@@ -71,7 +74,7 @@ function SignupForm() {
             <Typography variant="h5">
                 Signup New Account
             </Typography>
-            {alert}
+            {alert && <Alert severity="error">{alert}</Alert>}
             <TextField
                 fullWidth margin='normal'
                 id="outlined-basic"

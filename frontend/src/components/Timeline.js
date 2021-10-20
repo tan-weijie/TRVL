@@ -15,7 +15,6 @@ import TimelineDot from '@mui/lab/TimelineDot';
 import FlightIcon from '@mui/icons-material/Flight';
 import Typography from '@mui/material/Typography';
 import ExploreIcon from '@mui/icons-material/Explore';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { Button } from '@mui/material';
 import { Box } from '@mui/system';
 
@@ -34,7 +33,7 @@ const style = {
 
 export default function CustomizedTimeline(props) {
 
-    const[refresh, setRefresh] = useState(false);
+    const [refresh, setRefresh] = useState(false);
 
     let sDate = new Date(props.trip.startDate);
     let eDate = new Date(props.trip.endDate);
@@ -47,18 +46,18 @@ export default function CustomizedTimeline(props) {
         console.log(e.target.id);
         e.preventDefault();
         axios.delete(uri + e.target.id)
-        .then(res =>{
-            console.log(res);
-            window.location.href = `./${props.trip._id}`
-        })
-        .catch (err=>{
-            console.log(err);
-        })
+            .then(res => {
+                console.log(res);
+                window.location.href = `./${props.trip._id}`;
+            })
+            .catch(err => {
+                console.log(err);
+            })
     }
 
-    useEffect(() => {
+    // useEffect(() => {
 
-    }, [])
+    // }, [])
 
     return (
         <Timeline>
@@ -197,25 +196,22 @@ export default function CustomizedTimeline(props) {
                                         </TimelineSeparator>
                                         <TimelineContent sx={{ py: '12px' }}>
                                             <Box sx={{ width: 300, p: 2, border: '1px dashed grey' }}>
-                                            <Typography variant="h6" component="span">
-                                                Activity: {element.name}
-                                            </Typography>
-                                            <Typography>
-                                                Location: {element.location}
-                                            </Typography>
-                                            <Typography>
-                                                Time: {element.startTime}H - {element.endTime}H
-                                            </Typography>
-                                            <Typography>
-                                                Transport: {element.transport}
-                                            </Typography>
-                                            <Button   id={element._id} 
-                                            onClick={(handleDelete)}>
-                                            {/* <DeleteForeverIcon
-                                            id={element._id} 
-                                            onClick={handleDelete} 
-                                         /> */}DEL
-                                            </Button>
+                                                <Typography variant="h6" component="span">
+                                                    Activity: {element.name}
+                                                </Typography>
+                                                <Typography>
+                                                    Location: {element.location}
+                                                </Typography>
+                                                <Typography>
+                                                    Time: {element.startTime}H - {element.endTime}H
+                                                </Typography>
+                                                <Typography>
+                                                    Transport: {element.transport}
+                                                </Typography>
+                                                <Button id={element._id}
+                                                    onClick={(handleDelete)}>
+                                                    DEL
+                                                </Button>
                                             </Box>
                                         </TimelineContent>
                                     </TimelineItem>

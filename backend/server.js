@@ -30,7 +30,6 @@ const secret = process.env.SECRET;
 //find user with cookie token
 app.get('/user', async (req,res)=>{
     try {
-        console.log('what is this', req.cookies.token);
         const payload = await jwt.verify(req.cookies.token, secret)
         // console.log(payload);
         // const currentUser = await userModel.findOne(
@@ -129,16 +128,17 @@ function authToken(req, res, next) {
 
 //Logout
 app.post('/logout',(req,res)=>{
-    res.cookie('token','').send()
+    res.cookie('token','', {httpOnly:false}).send()
 })
 
 ///////////////////////////////////////////////////////
 
 // Get all trips
-app.get('/', async (req, res) => {
-    // console.log(req.user);
+app.get('/trips/:userid', async (req, res) => {
     try {
-        const data = await tripModel.find(req.user);
+        console.log('params', req.params.userid)
+        const data = await tripModel.find({userId: req.params.userid});
+        console.log(data);
         res.send(data);
     } catch (error) {
         console.log({status: 'bad', msg: error.message});

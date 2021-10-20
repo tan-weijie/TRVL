@@ -3,13 +3,8 @@ import { useState } from 'react';
 import axios from 'axios';
 
 // mui
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
-import { TextField } from '@mui/material';
-import TimePicker from '@mui/lab/TimePicker'
-import { Input } from '@mui/material';
+import { Box, Button, Typography, Modal, TextField, Alert } from '@mui/material';
+
 
 
 const style = {
@@ -101,7 +96,7 @@ export default function ActivityModal (props) {
             >
                 <Box sx={style}>
                     <Typography variant="h5">New Activity</Typography>
-                    {alert}
+                    {alert && <Alert severity="error">{alert}</Alert>}
                     <TextField 
                         fullWidth margin='normal' 
                         id="outlined-basic" 
