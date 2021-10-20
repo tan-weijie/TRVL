@@ -19,17 +19,18 @@ const style = {
     p: 4,
 };
 
-export default function ActivityModal (props) {
+export default function EditActivityModal (props) {
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
-    const [name, setName] = useState('');
-    const [location, setLocation] = useState('');
-    const [startTime, setStartTime] = useState('');
-    const [endTime, setEndTime] = useState('');
-    const [transport, setTransport] = useState('');
+    const [name, setName] = useState(props.activity.name);
+    const [location, setLocation] = useState(props.activity.location);
+    const [startTime, setStartTime] = useState(props.activity.startTime);
+    const [endTime, setEndTime] = useState(props.activity.endTime);
+    const [transport, setTransport] = useState(props.activity.transport);
     const [alert, setAlert] = useState('');
+
 
     const handleName = (e) => {
         setName(e.target.value)
@@ -68,16 +69,10 @@ export default function ActivityModal (props) {
             setAlert('End Time should not be earlier than Start Time');
             return
         } 
-        axios.put(`http://localhost:5000/days/${props.id}`, data)
+        axios.put(`http://localhost:5000/activities/${props.activity._id}`, data)
         .then(response =>{
             console.log('updated', response);
             setOpen(false);
-            setName('');
-            setLocation('');
-            setStartTime('');
-            setEndTime('');
-            setTransport('');
-            setAlert('')
             window.location.href = `./${props.trip._id}`
         }) 
         .catch(error =>{
@@ -87,7 +82,7 @@ export default function ActivityModal (props) {
 
     return (
         <div>
-            <Button onClick={handleOpen}>+</Button>
+            <Button onClick={handleOpen}>EDIT</Button>
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -95,7 +90,7 @@ export default function ActivityModal (props) {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
-                    <Typography variant="h5">New Activity</Typography>
+                    <Typography variant="h5">Edit Activity</Typography>
                     {alert && <Alert severity="error">{alert}</Alert>}
                     <TextField 
                         fullWidth margin='normal' 
@@ -154,7 +149,7 @@ export default function ActivityModal (props) {
                     onChange={handleTransport}
                     value={transport}
                     />
-                    <Button onClick={handleSubmit} type='submit'>Add Activity</Button>
+                    <Button onClick={handleSubmit} type='submit'>Submit</Button>
                 </Box>
             </Modal>
         </div>

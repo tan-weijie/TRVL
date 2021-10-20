@@ -23,7 +23,7 @@ const style = {
 function DashboardPage(props) {
     const uri = "http://localhost:5000/"
     const beach = "https://images.pexels.com/photos/1705254/pexels-photo-1705254.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200";
-    
+
     const user = useContext(User);
 
     const [country, setCountry] = useState('');
@@ -84,7 +84,7 @@ function DashboardPage(props) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!user){
+        if (!user) {
             setAlert('Please login.')
             return
         }
@@ -116,7 +116,7 @@ function DashboardPage(props) {
             src,
             userId: user
         };
-        
+
         axios.post(uri, data)
             .then(response => {
                 console.log('posted', response);
@@ -201,57 +201,58 @@ function DashboardPage(props) {
                 </form>
             </div>
             <Divider>
-            <Typography style={{textAlign: 'center'}} variant='h5'>My Trips ({trips.length})</Typography>
+                <Typography style={{ textAlign: 'center', margin: 30 }} variant='h5'>My Trips ({trips.length})</Typography>
             </Divider>
-            <Box sx={{
-                display: 'flex',
-                alignItems: 'flex-start',
-                p: 1,
-                m: 1,
-                bgcolor: 'background.paper',
-                // height: 100,
-                width: '100%'
-            }}>
-                
-                {trips.map(trip => {
-                    // startDate
-                    let sDate = new Date(trip.startDate);
-                    const sDay = sDate.toLocaleString('default', { day: '2-digit' });
-                    const sMonth = sDate.toLocaleString('default', { month: 'short' });
-                    const sYear = sDate.toLocaleString('default', { year: 'numeric' });
-                    // endDate
-                    let eDate = new Date(trip.endDate);
-                    const eDay = eDate.toLocaleString('default', { day: '2-digit' });
-                    const eMonth = eDate.toLocaleString('default', { month: 'short' });
-                    const eYear = eDate.toLocaleString('default', { year: 'numeric' });
-                    return (
-                        <Card sx={{ p: 1, minWidth: 200, maxWidth: 345 }}>
-                            <CardActionArea onClick={handleClick} id={trip._id}>
-                                <CardMedia
-                                    id={trip._id}
-                                    component="img"
-                                    height="140"
-                                    image={trip.src}
-                                    alt="no image"
-                                />
-                                <CardContent id={trip._id}>
-                                    <Typography id={trip._id} gutterBottom variant="h5" component="div">
-                                        {trip.country}
-                                    </Typography>
-                                    <Typography id={trip._id} variant="body2" color="text.secondary">
-                                        {`${sDay} ${sMonth} ${sYear}`} - {`${eDay} ${eMonth} ${eYear}`}
-                                    </Typography>
-                                </CardContent>
-                            </CardActionArea>
-                            <CardActions>
-                                <Button onClick={handleDelete} id={trip._id} size="small" color="primary">
-                                    Delete
-                                </Button>
-                            </CardActions>
-                        </Card>
-                    )
-                })}
-            </Box>
+            <div style={{ width: 'auto' }}>
+                <Box sx={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    alignItems: 'flex-start',
+                    justifyContent: 'center',
+                    height: 100,
+                    width: '100vw'
+                }}>
+
+                    {trips.map(trip => {
+                        // startDate
+                        let sDate = new Date(trip.startDate);
+                        const sDay = sDate.toLocaleString('default', { day: '2-digit' });
+                        const sMonth = sDate.toLocaleString('default', { month: 'short' });
+                        const sYear = sDate.toLocaleString('default', { year: 'numeric' });
+                        // endDate
+                        let eDate = new Date(trip.endDate);
+                        const eDay = eDate.toLocaleString('default', { day: '2-digit' });
+                        const eMonth = eDate.toLocaleString('default', { month: 'short' });
+                        const eYear = eDate.toLocaleString('default', { year: 'numeric' });
+                        return (
+                            <Card sx={{ p: 1, m: 2, minWidth: 200, maxWidth: 345 }}>
+                                <CardActionArea onClick={handleClick} id={trip._id}>
+                                    <CardMedia
+                                        id={trip._id}
+                                        component="img"
+                                        height="140"
+                                        image={trip.src}
+                                        alt="no image"
+                                    />
+                                    <CardContent id={trip._id}>
+                                        <Typography id={trip._id} gutterBottom variant="h5" component="div">
+                                            {trip.country}
+                                        </Typography>
+                                        <Typography id={trip._id} variant="body2" color="text.secondary">
+                                            {`${sDay} ${sMonth} ${sYear}`} - {`${eDay} ${eMonth} ${eYear}`}
+                                        </Typography>
+                                    </CardContent>
+                                </CardActionArea>
+                                <CardActions>
+                                    <Button onClick={handleDelete} id={trip._id} size="small" color="primary">
+                                        Delete
+                                    </Button>
+                                </CardActions>
+                            </Card>
+                        )
+                    })}
+                </Box>
+            </div>
         </div>
     )
 }

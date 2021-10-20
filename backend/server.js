@@ -199,28 +199,14 @@ app.put('/days/:id', async (req, res) => {
     }
 })
 // Edit activities - not working
+
 app.put('/activities/:id', async (req, res) => {
     try{
         // const data = await tripModel.updateOne({"days.activities._id": req.params.id}, {"$set": {"days.$.activities": req.body}});
-        const data = await tripModel.findOne({"activities._id": req.params.id});
-        console.log(data.days);
-        data.days.map(element => {
-            return element.activities.map(element =>{
-                if (element._id == req.params.id){
-                    element = {
-                        "name": "carrot",
-                        "startTime": "16:05",
-                        "endTime": "17:05",
-                        "transport": "Test"
-                    }
-                    return element;
-                }
-            })
-        })
-        await data.updateOne();
-        console.log(data.days[1].activities[1]);
-        
-        res.send('updated');
+        // const data = await tripModel.findOne({"days.activities._id": req.params.id});
+        const data = await tripModel.updateOne({"days.activities._id": req.params.id}, {$set: { "days.$.activities.$[elem]" : req.body}}, {arrayFilters: [{"elem._id": req.params.id}]});
+        console.log(data.days);        
+        res.json(data.days);
     } catch(err){
         console.log({status: 'bad', msg: err.message})
     }
@@ -231,7 +217,7 @@ app.put('/activities/:id', async (req, res) => {
 app.delete('/activities/:id', async (req, res) => {
     try {
         console.log('params', req.params.id)
-        const data = await tripModel.updateOne({"activities._id": req.params.id}, {"$pull": {"days.$[].activities": {"_id": req.params.id}}})
+        const data = await tripModel.updateOne({"days.activities._id": req.params.id}, {"$pull": {"days.$.activities": {"_id": req.params.id}}})
         console.log(data);
         res.send(data)
     } catch (err) {

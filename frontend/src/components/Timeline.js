@@ -1,22 +1,14 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
 import axios from 'axios';
+import ActivityModal from './ActivityModal'
 
 // mui
-import ActivityModal from './ActivityModal'
-import Chip from '@mui/material/Chip';
-import Timeline from '@mui/lab/Timeline';
-import TimelineItem from '@mui/lab/TimelineItem';
-import TimelineSeparator from '@mui/lab/TimelineSeparator';
-import TimelineConnector from '@mui/lab/TimelineConnector';
-import TimelineContent from '@mui/lab/TimelineContent';
-import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
-import TimelineDot from '@mui/lab/TimelineDot';
+import { Chip, Typography, Button } from '@mui/material';
+import { Timeline, TimelineItem, TimelineSeparator, TimelineConnector, TimelineContent, TimelineOppositeContent, TimelineDot } from '@mui/lab'
 import FlightIcon from '@mui/icons-material/Flight';
-import Typography from '@mui/material/Typography';
 import ExploreIcon from '@mui/icons-material/Explore';
-import { Button } from '@mui/material';
 import { Box } from '@mui/system';
+import EditActivityModal from './EditActivityModal';
 
 
 const style = {
@@ -32,8 +24,6 @@ const style = {
 };
 
 export default function CustomizedTimeline(props) {
-
-    const [refresh, setRefresh] = useState(false);
 
     let sDate = new Date(props.trip.startDate);
     let eDate = new Date(props.trip.endDate);
@@ -54,10 +44,6 @@ export default function CustomizedTimeline(props) {
                 console.log(err);
             })
     }
-
-    // useEffect(() => {
-
-    // }, [])
 
     return (
         <Timeline>
@@ -195,7 +181,7 @@ export default function CustomizedTimeline(props) {
                                             <TimelineConnector />
                                         </TimelineSeparator>
                                         <TimelineContent sx={{ py: '12px' }}>
-                                            <Box sx={{ width: 300, p: 2, border: '1px dashed grey' }}>
+                                            <Box sx={{ width: 300, p: 2, border: '1px solid grey', boxShadow: '0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22)' }}>
                                                 <Typography variant="h6" component="span">
                                                     Activity: {element.name}
                                                 </Typography>
@@ -212,6 +198,7 @@ export default function CustomizedTimeline(props) {
                                                     onClick={(handleDelete)}>
                                                     DEL
                                                 </Button>
+                                                <EditActivityModal activity={element} trip={props.trip}/>
                                             </Box>
                                         </TimelineContent>
                                     </TimelineItem>

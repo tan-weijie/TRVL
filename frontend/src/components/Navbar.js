@@ -32,8 +32,8 @@ export default function Navbar() {
         })
     }
     return (
-        <Box sx={{ flexGrow: 1 }}>
-            <AppBar style={{ backgroundColor: 'black' }} position="static">
+        <Box sx={{ flexGrow: 1, zIndex: 1, width: '100vw', position: 'sticky'}}>
+            <AppBar style={{backgroundColor: 'black'}} >
                 <Toolbar>
                     <AirplaneTicketIcon />
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>

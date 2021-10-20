@@ -36,11 +36,10 @@ function ShowTripPage() {
 
     const fetchTrip = () => {
         axios.get(uri + `trip/${id}`)
-
             .then((response) => {
-                console.log(response.data);
+                // console.log(response.data);
                 setTrip(response.data);
-                console.log(response.data.country)
+                // console.log(response.data.country)
             })
             .catch((error) => {
                 console.log(error.message);
@@ -51,7 +50,7 @@ function ShowTripPage() {
         <div>
             {trip.src && <img style={{ width: '100vw', height: '70vh', objectFit: 'cover' }} className="background-image" src={trip.src} />}
             <Box sx={style}>
-                {trip.days && <Typography variant="h3" style={{textShadow: '0 15px 40px rgb(0 0 0 / 50%)', textAlign: 'center'}}>{trip.days.length} days in {trip.country}</Typography>}
+                {trip.days && <Typography variant="h3" style={{textShadow: '0 15px 40px rgb(0 0 0 / 100%)', textAlign: 'center'}}>{trip.days.length} days in {trip.country}</Typography>}
             </Box>
             {trip.days ? <Timeline trip={trip} /> : <div>Loading</div>}
         </div>
