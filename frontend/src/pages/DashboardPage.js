@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import uuid from 'react-uuid';
 import axios from 'axios';
-import "./dashboard.css";
+// import "./dashboard.css";
 
 // mui
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import { TextField } from '@mui/material';
+import { Divider, TextField } from '@mui/material';
 import { Box } from '@mui/system';
 import { Button, CardActionArea, CardActions } from '@mui/material';
 
@@ -196,7 +196,9 @@ function DashboardPage(props) {
                     </Box>
                 </form>
             </div>
+            <Divider>
             <Typography style={{textAlign: 'center'}} variant='h5'>My Trips ({trips.length})</Typography>
+            </Divider>
             <Box sx={{
                 display: 'flex',
                 alignItems: 'flex-start',

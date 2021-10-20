@@ -18,19 +18,20 @@ function App() {
     const [login, setLogin] = useState('');
 
     useEffect(()=>{
-        axios.get("http://localhost:5000/user")
+        axios.get("http://localhost:5000/user", {withCredentials:true})
         .then(response =>{
             console.log(response)
-            setUsername(response.data.username)
-            setEmail(response.data.email)    
+            // setUsername(response.data.username)
+            // setEmail(response.data.email)    
         })
     },[])
-
     return (
         <BrowserRouter>
       
             {/* <Switch> */}
+         
                 <Navbar user={username}/>
+                
                 <Route exact path='/login'>
                     <LoginForm/>
                 </Route>

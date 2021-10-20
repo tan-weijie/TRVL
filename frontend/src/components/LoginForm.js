@@ -36,7 +36,7 @@ function LoginForm() {
             password
         };
         console.log(data);
-        axios.post('http://localhost:5000/login', data)
+        axios.post('http://localhost:5000/login', data, {withCredentials: true, credentials: 'include'})
         .then(res => {
             if(res.data.user){
                 window.location.href = "./home";

@@ -15,7 +15,12 @@ const userModel = require('./models/User');
 connectDB()
 
 // Body-parser
-app.use(cors());
+app.use(cors(
+    {
+        credentials: true,
+        origin: true,
+    }
+));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cookieParser())
@@ -25,13 +30,15 @@ const secret = process.env.SECRET;
 //find user with cookie token
 app.get('/user', async (req,res)=>{
     try {
+        console.log('what is this', req.cookies.token);
         const payload = await jwt.verify(req.cookies.token, secret)
-        const currentUser = await userModel.findOne(
-            {
-                username: payload.user.username
-            }
-        )
-        res.json(currentUser);
+        // console.log(payload);
+        // const currentUser = await userModel.findOne(
+        //     {
+        //         username: payload.user.username
+        //     }
+        // )
+        res.json(payload);
     } catch(err){
         console.log('get user route', err.message)
         res.send(err.message);
@@ -71,12 +78,12 @@ app.post('/login', async (req, res) => {
         console.log(user);
         if (user){
             const matched = await bcrypt.compareSync(password, user.password)
-            // console.log(comparePassword);
             if(matched){
                 await jwt.sign({user}, secret, {expiresIn: 3600}, (err, token) => {
-                    if(err) throw err;
+                    // if(err) throw err;
                     // stores token in http cookie headers
-                    res.cookie('token', token).json(
+                    console.log('token', token);
+                    res.cookie('token', token, {httpOnly: false}).json(
                         {
                             // returns token with user details
                             user: {
