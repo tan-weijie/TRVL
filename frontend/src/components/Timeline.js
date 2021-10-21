@@ -12,25 +12,7 @@ import { Box } from '@mui/system';
 import { Delete } from '@mui/icons-material';
 
 
-
-const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-};
-
 export default function CustomizedTimeline(props) {
-
-    let sDate = new Date(props.trip.startDate);
-    let eDate = new Date(props.trip.endDate);
-    let difference = eDate - sDate;
-    difference = difference / 1000 / 60 / 60 / 24;
 
     const uri = process.env.REACT_APP_SERVERURI;
 
@@ -51,26 +33,29 @@ export default function CustomizedTimeline(props) {
         <Timeline>
             {props.trip.days.map((day, index) => {
                 let date = new Date(day.date);
-                if (index == 0) {
-                    return (
-                        <>
-                            <TimelineItem className="day">
-                                <TimelineOppositeContent
-                                    sx={{ m: 'auto 0' }}
-                                    align="right"
-                                    variant="body2"
-                                    color="text.secondary"
-                                >
-                                    Day {index + 1}
-                                </TimelineOppositeContent>
-                                <TimelineSeparator>
-                                    <TimelineConnector />
-                                    <Chip label={date.toLocaleDateString('en-AU')} />
-                                    <TimelineConnector />
-                                </TimelineSeparator>
-                                <TimelineContent sx={{ py: '12px', px: 2 }}>
-                                </TimelineContent>
-                            </TimelineItem>
+                return (
+                    <>
+                        <TimelineItem className="day">
+                            <TimelineOppositeContent
+                                sx={{ m: 'auto 0' }}
+                                align="right"
+                                variant="body2"
+                                color="text.secondary"
+                            >
+                                Day {index + 1}
+                            </TimelineOppositeContent>
+                            <TimelineSeparator>
+                                <TimelineConnector />
+                                <Chip style={{ fontSize: 17}} label={`${date.toLocaleString('default', { weekday: 'short' })}, ${date.toLocaleString('default', { day: '2-digit' })} ${date.toLocaleString('default', { month: 'short' })}`} />
+                                <TimelineConnector />
+                            </TimelineSeparator>
+                            <TimelineContent sx={{ py: '12px', px: 2 }}>
+                                <Typography variant="h6" component="span">
+                                </Typography>
+                                <ActivityModal trip={props.trip} id={day._id} />
+                            </TimelineContent>
+                        </TimelineItem>
+                        {index === 0 &&
                             <TimelineItem className="departure">
                                 <TimelineOppositeContent
                                     sx={{ m: 'auto 0' }}
@@ -82,7 +67,7 @@ export default function CustomizedTimeline(props) {
                                 </TimelineOppositeContent>
                                 <TimelineSeparator>
                                     <TimelineConnector />
-                                    <TimelineDot>
+                                    <TimelineDot style={{ backgroundColor: '#403d3d' }}>
                                         <FlightIcon />
                                     </TimelineDot>
                                     <TimelineConnector />
@@ -94,28 +79,8 @@ export default function CustomizedTimeline(props) {
                                     <Typography>Departure</Typography>
                                 </TimelineContent>
                             </TimelineItem>
-                        </>
-                    )
-                } else if (index == props.trip.days.length - 1) {
-                    return (
-                        <>
-                            <TimelineItem className="day">
-                                <TimelineOppositeContent
-                                    sx={{ m: 'auto 0' }}
-                                    align="right"
-                                    variant="body2"
-                                    color="text.secondary"
-                                >
-                                    Day {index + 1}
-                                </TimelineOppositeContent>
-                                <TimelineSeparator>
-                                    <TimelineConnector />
-                                    <Chip label={date.toLocaleDateString('en-AU')} />
-                                    <TimelineConnector />
-                                </TimelineSeparator>
-                                <TimelineContent sx={{ py: '12px', px: 2 }}>
-                                </TimelineContent>
-                            </TimelineItem>
+                        }
+                        {index === props.trip.days.length - 1 &&
                             <TimelineItem className="arrival">
                                 <TimelineOppositeContent
                                     sx={{ m: 'auto 0' }}
@@ -127,7 +92,7 @@ export default function CustomizedTimeline(props) {
                                 </TimelineOppositeContent>
                                 <TimelineSeparator>
                                     <TimelineConnector />
-                                    <TimelineDot>
+                                    <TimelineDot style={{ backgroundColor: '#403d3d' }}>
                                         <FlightIcon />
                                     </TimelineDot>
                                     <TimelineConnector />
@@ -138,79 +103,53 @@ export default function CustomizedTimeline(props) {
                                     </Typography>
                                     <Typography>Arrival</Typography>
                                 </TimelineContent>
-                            </TimelineItem>
-                        </>
-                    )
-                } else {
-                    return (
-                        <>
-                            <TimelineItem className="day">
-                                <TimelineOppositeContent
-                                    sx={{ m: 'auto 0' }}
-                                    align="right"
-                                    variant="body2"
-                                    color="text.secondary"
-                                >
-                                    Day {index + 1}
-                                </TimelineOppositeContent>
-                                <TimelineSeparator>
-                                    <TimelineConnector />
-                                    <Chip label={date.toLocaleDateString('en-AU')} />
-                                    <TimelineConnector />
-                                </TimelineSeparator>
-                                <TimelineContent sx={{ py: '12px', px: 2 }}>
-                                    <Typography variant="h6" component="span">
-                                    </Typography>
-                                    {/* <Typography>Activity: {day.activities[0].name}</Typography> */}
-                                    <ActivityModal trip={props.trip} id={day._id} />
-                                </TimelineContent>
-                            </TimelineItem>
-                            {day.activities.map(element => {
-                                return (
-                                    <TimelineItem key="1" className="day">
-                                        <TimelineOppositeContent
-                                            sx={{ m: 'auto 0' }}
-                                            align="right"
-                                            variant="body2"
-                                            color="text.secondary"
-                                        >
-                                        </TimelineOppositeContent>
-                                        <TimelineSeparator>
-                                            <TimelineConnector />
-                                            <TimelineDot color='primary'>
-                                                <ExploreIcon />
-                                            </TimelineDot>
-                                            <TimelineConnector />
-                                        </TimelineSeparator>
-                                        <TimelineContent sx={{ py: '12px' }}>
-                                            <Box sx={{ width: 300, height: 'auto', p: 2, border: '1px solid grey', boxShadow: '0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22)', flexGrow: 1 }}>
-                                                <Typography variant="h6" component="span">
-                                                    Activity: {element.name}
-                                                </Typography>
-                                                <Typography>
-                                                    Location: {element.location}
-                                                </Typography>
-                                                <Typography>
-                                                    Time: {element.startTime}H - {element.endTime}H
-                                                </Typography>
-                                                <Typography>
-                                                    Transport: {element.transport}
-                                                </Typography>
-                                                <div style={{ display: 'inline' }}>
-                                                    <Button size='small' startIcon={<Delete />} color="primary" id={element._id}
-                                                        onClick={(handleDelete)}>
-                                                        DEL
-                                                    </Button>
-                                                </div>
-                                                <EditActivityModal style={{ display: 'inline' }} activity={element} trip={props.trip} />
-                                            </Box>
-                                        </TimelineContent>
-                                    </TimelineItem>
-                                )
-                            })}
-                        </>
-                    )
-                }
+                            </TimelineItem>}
+                        {day.activities.map(element => {
+                            return (
+                                <TimelineItem key="1" className="day">
+                                    <TimelineOppositeContent
+                                        sx={{ m: 'auto 0' }}
+                                        align="right"
+                                        variant="body2"
+                                        color="text.secondary"
+                                    >
+                                    </TimelineOppositeContent>
+                                    <TimelineSeparator>
+                                        <TimelineConnector />
+                                        <TimelineDot color='primary'>
+                                            <ExploreIcon />
+                                        </TimelineDot>
+                                        <TimelineConnector />
+                                    </TimelineSeparator>
+                                    <TimelineContent sx={{ py: '12px' }}>
+                                        <Box sx={{ width: 300, height: 'auto', p: 2, border: '1px solid grey', boxShadow: '0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22)', flexGrow: 1 }}>
+                                            <Typography variant="h6" component="span">
+                                                Activity: {element.name}
+                                            </Typography>
+                                            <Typography>
+                                                Location: {element.location}
+                                            </Typography>
+                                            <Typography>
+                                                Time: {element.startTime > 12 ? `${element.startTime - 12}PM` : `${element.startTime}AM`} - {element.endTime > 12 ? `${element.endTime - 12}PM` : `${element.endTime}AM`}
+                                            </Typography>
+                                            <Typography>
+                                                Transport: {element.transport}
+                                            </Typography>
+                                            <div style={{ display: 'inline' }}>
+                                                <Button size='small' startIcon={<Delete />} color="primary" id={element._id}
+                                                    onClick={(handleDelete)}>
+                                                    DEL
+                                                </Button>
+                                            </div>
+                                            <EditActivityModal style={{ display: 'inline' }} activity={element} trip={props.trip} />
+                                        </Box>
+                                    </TimelineContent>
+                                </TimelineItem>
+                            )
+                        })}
+
+                    </>
+                )
             })}
         </Timeline>
     );

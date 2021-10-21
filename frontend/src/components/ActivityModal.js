@@ -65,7 +65,7 @@ export default function ActivityModal (props) {
             setAlert('Please enter all fields');
             return
         } else if (endTime < startTime){
-            setAlert('End Time should not be earlier than Start Time');
+            setAlert('End time should not be earlier than start time');
             return
         } 
         const uri = process.env.REACT_APP_SERVERURI;

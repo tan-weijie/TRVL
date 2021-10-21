@@ -4,7 +4,6 @@ import axios from 'axios';
 
 // mui
 import { Box, Button, Typography, Modal, TextField, Alert } from '@mui/material';
-import { IconButton } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 
 
@@ -70,7 +69,7 @@ export default function EditActivityModal (props) {
             setAlert('Please enter all fields');
             return
         } else if (endTime < startTime){
-            setAlert('End Time should not be earlier than Start Time');
+            setAlert('End time should not be earlier than start time');
             return
         } 
         axios.put(uri + `activities/${props.activity._id}`, data)

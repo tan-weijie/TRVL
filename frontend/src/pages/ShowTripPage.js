@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Timeline from '../components/Timeline'
 
 // mui
 import { Typography, Box } from '@mui/material';
-
-require('dotenv').config();
 
 const style = {
     position: 'absolute',
@@ -21,7 +19,7 @@ const style = {
 
 function ShowTripPage() {
 
-    const [trip, setTrip] = useState(['']);
+    const [trip, setTrip] = useState('');
     const { id } = useParams();
 
     const uri = process.env.REACT_APP_SERVERURI;
@@ -33,20 +31,30 @@ function ShowTripPage() {
     const fetchTrip = () => {
         axios.get(uri + `trip/${id}`)
             .then((response) => {
-                // console.log(response.data);
                 setTrip(response.data);
-                // console.log(response.data.country)
             })
             .catch((error) => {
                 console.log(error.message);
             })
     }
 
+    // startDate
+    let sDate = new Date(trip.startDate);
+    const sDay = sDate.toLocaleString('default', { day: '2-digit' });
+    const sMonth = sDate.toLocaleString('default', { month: 'short' });
+    const sYear = sDate.toLocaleString('default', { year: 'numeric' });
+    // endDate
+    let eDate = new Date(trip.endDate);
+    const eDay = eDate.toLocaleString('default', { day: '2-digit' });
+    const eMonth = eDate.toLocaleString('default', { month: 'short' });
+    const eYear = eDate.toLocaleString('default', { year: 'numeric' });
+
     return (
         <div>
-            {trip.src && <img style={{ width: '100vw', height: '70vh', objectFit: 'cover' }} className="background-image" src={trip.src} />}
+            {trip.src && <img style={{ width: '100vw', height: '70vh', objectFit: 'cover' }} className="background-image" src={trip.src} alt=""/>}
             <Box sx={style}>
-                {trip.days && <Typography variant="h3" style={{textShadow: '0 15px 40px rgb(0 0 0 / 100%)', textAlign: 'center'}}>{trip.days.length} days in {trip.country}</Typography>}
+                {trip.days && <Typography variant="h3" style={{ textShadow: '0 15px 40px rgb(0 0 0 / 100%)', textAlign: 'center' }}>{trip.days.length} days in {trip.country}</Typography>}
+                {trip && <Typography variant="h5" style={{ textShadow: '0 15px 40px rgb(0 0 0 / 100%)', textAlign: 'center' }}>{`${sDay} ${sMonth} ${sYear}`} - {`${eDay} ${eMonth} ${eYear}`}</Typography>}
             </Box>
             {trip.days ? <Timeline trip={trip} /> : <div>Loading</div>}
         </div>

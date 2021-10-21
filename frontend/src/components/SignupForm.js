@@ -57,7 +57,7 @@ function SignupForm() {
         axios.post(uri + 'signup', data)
             .then(res => {
                 console.log('res', res.data);
-                if (res.data == "Existing user or email.") {
+                if (res.data === "Existing user or email.") {
                     setAlert(res.data);
                 } else {
                     console.log(res.data);

@@ -12,7 +12,7 @@ import { Delete } from '@mui/icons-material';
 // Box style
 const style = {
     position: 'absolute',
-    top: '50%',
+    top: '45%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
     width: 400,
@@ -34,11 +34,6 @@ function DashboardPage(props) {
     const [refresh, setRefresh] = useState(false);
     const [alert, setAlert] = useState('');
 
-    useEffect(() => {
-        fetchTrips();
-    }, [user, refresh])
-
-
     const fetchTrips = () => {
         user && axios.get(uri + `trips/${user._id}`)
             .then(response => {
@@ -48,6 +43,10 @@ function DashboardPage(props) {
                 console.log(error.message)
             })
     }
+
+    useEffect(() => {
+        fetchTrips();
+    }, [user, refresh])
 
     const fetchImage = async (country) => {
         const apiKey = "563492ad6f91700001000001fb4b588e36424f5db5e96fd30f05c911";
@@ -151,13 +150,10 @@ function DashboardPage(props) {
 
     return (
         <div>
-            <img style={{ width: '100vw', height: '80vh', objectFit: 'cover' }} className="dashboard-background" src={beach} />
-            {/* <Typography>
-                THE WORLD AWAITS
-            </Typography> */}
-            <div>
-                <form className='center' onSubmit={handleSubmit}>
-                    <Box sx={style}>
+            <img style={{ width: '100vw', height: '80vh', objectFit: 'cover' }} className="dashboard-background" src={beach} alt="" />
+            <div >
+                <Box sx={style}>
+                    <form className='center' onSubmit={handleSubmit}>
                         <Typography style={{ margin: 10 }} variant='h5'>
                             Itinerary Planner
                         </Typography>
@@ -197,19 +193,19 @@ function DashboardPage(props) {
                             type="date"
                             value={endDate} />
                         <Button style={{ margin: 10 }} variant="outlined" type="submit">Add</Button>
-                    </Box>
-                </form>
+
+                    </form>
+                </Box>
             </div>
             <Divider>
                 <Typography style={{ textAlign: 'center', margin: 30 }} variant='h5'>My Trips ({trips.length})</Typography>
             </Divider>
-            <div style={{ width: 'auto' }}>
+            <div style={{ display: 'inline-block', width: 'auto', height: 'auto' }}>
                 <Box sx={{
                     display: 'flex',
                     flexWrap: 'wrap',
                     alignItems: 'flex-start',
                     justifyContent: 'center',
-                    height: 100,
                     width: '100vw'
                 }}>
 
@@ -253,6 +249,9 @@ function DashboardPage(props) {
                     })}
                 </Box>
             </div>
+            <Divider>
+                <Typography style={{ textAlign: 'center', margin: 30 }} variant='h5'>Trending Destinations</Typography>
+            </Divider>
         </div>
     )
 }
