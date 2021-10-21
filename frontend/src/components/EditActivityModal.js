@@ -34,7 +34,6 @@ export default function EditActivityModal (props) {
     const [transport, setTransport] = useState(props.activity.transport);
     const [alert, setAlert] = useState('');
 
-
     const handleName = (e) => {
         setName(e.target.value)
     }
@@ -64,7 +63,6 @@ export default function EditActivityModal (props) {
             endTime,
             transport
         }
-        console.log(data);
         if (!name || !location || !startTime || !endTime || !transport){
             setAlert('Please enter all fields');
             return
@@ -76,7 +74,7 @@ export default function EditActivityModal (props) {
         .then(response =>{
             console.log('updated', response);
             setOpen(false);
-            window.location.href = `./${props.trip._id}`
+            props.setRefresh(true);
         }) 
         .catch(error =>{
             console.log(error.message);

@@ -31,12 +31,6 @@ const secret = process.env.SECRET;
 app.get('/user', async (req,res)=>{
     try {
         const payload = await jwt.verify(req.cookies.token, secret)
-        // console.log(payload);
-        // const currentUser = await userModel.findOne(
-        //     {
-        //         username: payload.user.username
-        //     }
-        // )
         res.json(payload);
     } catch(err){
         console.log('get user route', err.message)
@@ -48,7 +42,6 @@ app.get('/user', async (req,res)=>{
 app.post('/signup', async (req, res) => {
     try {
         const user = await userModel.find({$or: [{username: req.body.username, email: req.body.email}]})
-        console.log(await user);
         if (user.length) {
             res.send('Existing user or email.')
         } 
@@ -64,7 +57,6 @@ app.post('/signup', async (req, res) => {
             res.send(data);
         }
     } catch (err) {
-        console.log(err.message);
         res.send('Existing user or email.');
     }
 })
@@ -74,14 +66,12 @@ app.post('/login', async (req, res) => {
     try {
         const {username, password} = req.body;
         const user = await userModel.findOne({username});
-        console.log(user);
         if (user){
             const matched = await bcrypt.compareSync(password, user.password)
             if(matched){
                 await jwt.sign({user}, secret, {expiresIn: 3600}, (err, token) => {
-                    // if(err) throw err;
+                    if(err) throw err;
                     // stores token in http cookie headers
-                    console.log('token', token);
                     res.cookie('token', token, {httpOnly: false}).json(
                         {
                             // returns token with user details
@@ -136,9 +126,7 @@ app.post('/logout',(req,res)=>{
 // Get all trips
 app.get('/trips/:userid', async (req, res) => {
     try {
-        console.log('params', req.params.userid)
         const data = await tripModel.find({userId: req.params.userid});
-        console.log(data);
         res.send(data);
     } catch (error) {
         console.log({status: 'bad', msg: error.message});
@@ -160,7 +148,6 @@ app.post('/', async (req, res) => {
     try {
         const data = await tripModel.create(req.body);
         res.send('added new trip')
-        console.log({status: 'ok', msg: 'added new trip'});
     } catch (error) {
         console.log({status: 'bad', msg: error.message})
     }
@@ -179,23 +166,20 @@ app.delete('/trip/:id', async (req, res) => {
 // Update 1 trip
 app.put('/trip/:id', async (req, res) => {
     try {
-        const data = await tripModel.findOneAndUpdate({_id: req.params.id}, req.body)
-        res.send(data)
+        const data = await tripModel.findOneAndUpdate({_id: req.params.id}, req.body);
+        res.send(data);
     } catch (error) {
-        console.log({status: 'bad', msg: error.message})
+        console.log({status: 'bad', msg: error.message});
     }
 })
 
 // Add activities
 app.put('/days/:id', async (req, res) => {
     try {
-        console.log('params',req.params.id)
-        const data = await tripModel.updateOne({"days._id": req.params.id},{ "$push": {"days.$.activities": req.body}})
-        console.log(req.body)
-        console.log(data);
-        res.send('edited')
+        const data = await tripModel.updateOne({"days._id": req.params.id},{ "$push": {"days.$.activities": req.body}});
+        res.send('added');
     } catch (error) {
-        console.log({status: 'bad', msg: error.message})
+        console.log({status: 'bad', msg: error.message});
     }
 })
 
@@ -203,8 +187,7 @@ app.put('/days/:id', async (req, res) => {
 app.put('/activities/:id', async (req, res) => {
     try{
         const data = await tripModel.updateOne({"days.activities._id": req.params.id}, {$set: { "days.$.activities.$[elem]" : req.body}}, {arrayFilters: [{"elem._id": req.params.id}]});
-        console.log(data.days);        
-        res.json(data.days);
+        res.send('editted');
     } catch(err){
         console.log({status: 'bad', msg: err.message})
     }
@@ -213,23 +196,12 @@ app.put('/activities/:id', async (req, res) => {
 // Delete activities
 app.delete('/activities/:id', async (req, res) => {
     try {
-        console.log('params', req.params.id)
-        const data = await tripModel.updateOne({"days.activities._id": req.params.id}, {"$pull": {"days.$.activities": {"_id": req.params.id}}})
-        console.log(data);
-        res.send(data)
+        const data = await tripModel.updateOne({"days.activities._id": req.params.id}, {"$pull": {"days.$.activities": {"_id": req.params.id}}});
+        res.send('activities deleted');
     } catch (err) {
-        console.log({status: 'bad', msg: err.message})
+        console.log({status: 'bad', msg: err.message});
     }
 })
-// FUCKING IMPORTANT
-
-// db.players.updateMany(
-//     { scores: { $gte: 10 } },
-//     { $set: { "scores.$[e]" : 10 } },
-//     { arrayFilters: [ { "e": { $gte: 10 } } ] }
-//  )
-
-
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

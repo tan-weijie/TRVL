@@ -20,6 +20,7 @@ const style = {
 };
 
 export default function ActivityModal (props) {
+
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -64,6 +65,9 @@ export default function ActivityModal (props) {
         if (!name || !location || !startTime || !endTime || !transport){
             setAlert('Please enter all fields');
             return
+        } else if (startTime < new Date()){
+            setAlert('Start day')
+            return
         } else if (endTime < startTime){
             setAlert('End time should not be earlier than start time');
             return
@@ -79,7 +83,7 @@ export default function ActivityModal (props) {
             setEndTime('');
             setTransport('');
             setAlert('')
-            window.location.href = `./${props.trip._id}`
+            props.setRefresh(true);
         }) 
         .catch(error =>{
             console.log(error.message);

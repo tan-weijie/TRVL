@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import axios from 'axios';
 
 // mui
-import { Button, TextField, Typography, Alert } from '@mui/material'
+import { Button, TextField, Typography, Alert, Link } from '@mui/material'
 import { Box } from '@mui/system'
 
 const uri = process.env.REACT_APP_SERVERURI;
@@ -42,7 +42,7 @@ function LoginForm() {
             setAlert('Please input all fields.');
             return
         }
-        console.log(data);
+
         // headers are important else cookies unable to set
         axios.post(uri + 'login', data, { withCredentials: true, credentials: 'include' })
             .then(res => {
@@ -50,7 +50,6 @@ function LoginForm() {
                     setAlert('');
                     window.location.href = "./home";
                 } else {
-                    console.log(res.data);
                     setAlert(res.data);
                 }
             })
@@ -61,11 +60,13 @@ function LoginForm() {
 
     return (
         <Box sx={style}>
-            <Typography variant="h5">
+            <Typography style={{margin: 5}} variant="h5">
                 Login to TRVL
             </Typography>
             {alert && <Alert severity="error">{alert}</Alert>}
-
+            <Link style={{margin: 5}} href="./signup" underline='hover'>
+                Not a user? Click here to register.
+            </Link>
             <TextField
                 fullWidth margin='normal'
                 id="outlined-basic"
@@ -93,11 +94,8 @@ function LoginForm() {
                 Login
             </Button>
             <br />
-            <Button href="./signup">
-                Register New User
-            </Button>
         </Box>
     )
 }
 
-export default LoginForm
+export default LoginForm;

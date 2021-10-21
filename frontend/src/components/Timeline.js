@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import ActivityModal from './ActivityModal'
 import EditActivityModal from './EditActivityModal';
@@ -11,6 +11,17 @@ import ExploreIcon from '@mui/icons-material/Explore';
 import { Box } from '@mui/system';
 import { Delete } from '@mui/icons-material';
 
+const timeParser = (time) => {
+    let timeHour = parseInt(time.split(':')[0]); 
+    if (timeHour >= 12){
+        timeHour = ((timeHour + 11) % 12 + 1);
+        let parsedTime = `${timeHour}:${time.split(':')[1]}PM`;
+        return parsedTime;
+    } else {
+        let parsedTime = `${time}AM`;
+        return parsedTime;
+    }
+}
 
 export default function CustomizedTimeline(props) {
 
@@ -22,7 +33,7 @@ export default function CustomizedTimeline(props) {
         axios.delete(uri + 'activities/' + e.target.id)
             .then(res => {
                 console.log(res);
-                window.location.href = `./${props.trip._id}`;
+                props.setRefresh(true);
             })
             .catch(err => {
                 console.log(err);
@@ -46,13 +57,13 @@ export default function CustomizedTimeline(props) {
                             </TimelineOppositeContent>
                             <TimelineSeparator>
                                 <TimelineConnector />
-                                <Chip style={{ fontSize: 17}} label={`${date.toLocaleString('default', { weekday: 'short' })}, ${date.toLocaleString('default', { day: '2-digit' })} ${date.toLocaleString('default', { month: 'short' })}`} />
+                                <Chip style={{ fontSize: 17, width: '130px'}} label={`${date.toLocaleString('default', { weekday: 'short' })}, ${date.toLocaleString('default', { day: '2-digit' })} ${date.toLocaleString('default', { month: 'short' })}`} />
                                 <TimelineConnector />
                             </TimelineSeparator>
                             <TimelineContent sx={{ py: '12px', px: 2 }}>
                                 <Typography variant="h6" component="span">
                                 </Typography>
-                                <ActivityModal trip={props.trip} id={day._id} />
+                                <ActivityModal trip={props.trip} setRefresh={props.setRefresh} id={day._id} />
                             </TimelineContent>
                         </TimelineItem>
                         {index === 0 &&
@@ -130,7 +141,7 @@ export default function CustomizedTimeline(props) {
                                                 Location: {element.location}
                                             </Typography>
                                             <Typography>
-                                                Time: {element.startTime > 12 ? `${element.startTime - 12}PM` : `${element.startTime}AM`} - {element.endTime > 12 ? `${element.endTime - 12}PM` : `${element.endTime}AM`}
+                                                Time: {timeParser(element.startTime)} - {timeParser(element.endTime)}
                                             </Typography>
                                             <Typography>
                                                 Transport: {element.transport}
@@ -141,13 +152,12 @@ export default function CustomizedTimeline(props) {
                                                     DEL
                                                 </Button>
                                             </div>
-                                            <EditActivityModal style={{ display: 'inline' }} activity={element} trip={props.trip} />
+                                            <EditActivityModal style={{ display: 'inline' }} activity={element} trip={props.trip} setRefresh={props.setRefresh}/>
                                         </Box>
                                     </TimelineContent>
                                 </TimelineItem>
                             )
                         })}
-
                     </>
                 )
             })}

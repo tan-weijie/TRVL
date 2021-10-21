@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import uuid from 'react-uuid';
 import axios from 'axios';
 import { User } from '../App';
-import "./dashboard.css";
+import TrendingDestinations from '../components/TrendingDestinations';
 
 // mui
 import { Box } from '@mui/system';
@@ -21,7 +21,7 @@ const style = {
     p: 4,
 };
 
-function DashboardPage(props) {
+function DashboardPage() {
     const uri = "http://localhost:5000/"
     const beach = "https://images.pexels.com/photos/1705254/pexels-photo-1705254.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200";
 
@@ -90,6 +90,9 @@ function DashboardPage(props) {
         if (!country || !startDate || !endDate) {
             setAlert('Please enter all fields.')
             return
+        } else if (new Date(startDate) < new Date()) {
+            setAlert('Oops. Time travelling not allowed.')
+            return
         } else if (endDate < startDate) {
             setAlert('End date should not be earlier than start date.');
             return
@@ -100,7 +103,6 @@ function DashboardPage(props) {
         let eDate = new Date(endDate);
         let difference = eDate - sDate;
         difference = difference / 1000 / 60 / 60 / 24;
-        console.log(difference)
         let days = [];
         for (let i = 0; i <= difference; i++) {
             days.push({ date: new Date(sDate.getTime() + (i * 24 * 60 * 60 * 1000)), activities: [] })
@@ -137,10 +139,8 @@ function DashboardPage(props) {
 
     const handleDelete = (e) => {
         e.preventDefault();
-        console.log(e.target.id)
         axios.delete(uri + `trip/${e.target.id}`)
             .then(response => {
-                console.log('deleted');
                 setRefresh(!refresh)
             })
             .catch(error => {
@@ -153,8 +153,8 @@ function DashboardPage(props) {
             <img style={{ width: '100vw', height: '80vh', objectFit: 'cover' }} className="dashboard-background" src={beach} alt="" />
             <div >
                 <Box sx={style}>
-                    <form className='center' onSubmit={handleSubmit}>
-                        <Typography style={{ margin: 10 }} variant='h5'>
+                    <form style={{textAlign: 'center'}}onSubmit={handleSubmit}>
+                        <Typography style={{ margin: 10 }} variant='h4'>
                             Itinerary Planner
                         </Typography>
                         {alert && <Alert severity="error">{alert}</Alert>}
@@ -192,13 +192,12 @@ function DashboardPage(props) {
                             onChange={handleEndDate}
                             type="date"
                             value={endDate} />
-                        <Button style={{ margin: 10 }} variant="outlined" type="submit">Add</Button>
-
+                        <Button style={{ margin: 10 }} variant="outlined" type="submit">Add Trip</Button>
                     </form>
                 </Box>
             </div>
             <Divider>
-                <Typography style={{ textAlign: 'center', margin: 30 }} variant='h5'>My Trips ({trips.length})</Typography>
+                <Typography style={{ textAlign: 'center', margin: 30 }} variant='h4'>My Trips ({trips.length})</Typography>
             </Divider>
             <div style={{ display: 'inline-block', width: 'auto', height: 'auto' }}>
                 <Box sx={{
@@ -250,8 +249,9 @@ function DashboardPage(props) {
                 </Box>
             </div>
             <Divider>
-                <Typography style={{ textAlign: 'center', margin: 30 }} variant='h5'>Trending Destinations</Typography>
+                <Typography style={{ textAlign: 'center', margin: 30 }} variant='h4'>Trending Destinations</Typography>
             </Divider>
+            <TrendingDestinations />
         </div>
     )
 }

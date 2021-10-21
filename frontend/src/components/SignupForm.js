@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import axios from 'axios';
-import { Button, TextField, Typography, Alert } from '@mui/material'
+import { Button, TextField, Typography, Alert, Link } from '@mui/material'
 import { Box } from '@mui/system'
 
 
@@ -73,10 +73,13 @@ function SignupForm() {
     }
     return (
         <Box sx={style}>
-            <Typography variant="h5">
+            <Typography style={{margin: 5}} variant="h5">
                 Signup New Account
             </Typography>
             {alert && <Alert severity="error">{alert}</Alert>}
+            <Link style={{margin: 5}} href="./login" underline='hover'>
+                Already a user? Click here to login instead.
+            </Link>
             <TextField
                 fullWidth margin='normal'
                 id="outlined-basic"

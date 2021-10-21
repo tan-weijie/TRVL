@@ -20,18 +20,20 @@ const style = {
 function ShowTripPage() {
 
     const [trip, setTrip] = useState('');
+    const [refresh, setRefresh] = useState(false);
     const { id } = useParams();
 
     const uri = process.env.REACT_APP_SERVERURI;
 
     useEffect(() => {
         fetchTrip();
-    }, [])
+    }, [refresh])
 
     const fetchTrip = () => {
+        setRefresh(false);
         axios.get(uri + `trip/${id}`)
             .then((response) => {
-                setTrip(response.data);
+                setTrip(response.data);  
             })
             .catch((error) => {
                 console.log(error.message);
@@ -51,12 +53,12 @@ function ShowTripPage() {
 
     return (
         <div>
-            {trip.src && <img style={{ width: '100vw', height: '70vh', objectFit: 'cover' }} className="background-image" src={trip.src} alt=""/>}
+            {trip.src && <img style={{ width: '100vw', height: '70vh', objectFit: 'cover' }} className="background-image" src={trip.src} alt="" />}
             <Box sx={style}>
                 {trip.days && <Typography variant="h3" style={{ textShadow: '0 15px 40px rgb(0 0 0 / 100%)', textAlign: 'center' }}>{trip.days.length} days in {trip.country}</Typography>}
                 {trip && <Typography variant="h5" style={{ textShadow: '0 15px 40px rgb(0 0 0 / 100%)', textAlign: 'center' }}>{`${sDay} ${sMonth} ${sYear}`} - {`${eDay} ${eMonth} ${eYear}`}</Typography>}
             </Box>
-            {trip.days ? <Timeline trip={trip} /> : <div>Loading</div>}
+            {trip.days ? <Timeline trip={trip} setRefresh={setRefresh}/> : <div>Loading</div>}
         </div>
     )
 
