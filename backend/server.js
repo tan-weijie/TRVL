@@ -186,7 +186,7 @@ app.put('/days/:id', async (req, res) => {
 // Edit activities
 app.put('/activities/:id', async (req, res) => {
     try{
-        const data = await tripModel.updateOne({"days.activities._id": req.params.id}, {$set: { "days.$.activities.$[elem]" : req.body}}, {arrayFilters: [{"elem._id": req.params.id}]});
+        const data = await tripModel.updateOne({"days.activities._id": req.params.id}, {$set: { "days.$.activities.$[activity]" : req.body}}, {arrayFilters: [{"activity._id": req.params.id}]});
         res.send('editted');
     } catch(err){
         console.log({status: 'bad', msg: err.message})

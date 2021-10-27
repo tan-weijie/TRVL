@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import axios from 'axios';
 import ActivityModal from './ActivityModal'
 import EditActivityModal from './EditActivityModal';

@@ -197,7 +197,7 @@ function DashboardPage() {
                 </Box>
             </div>
             <Divider>
-                <Typography style={{ textAlign: 'center', margin: 30 }} variant='h4'>My Trips ({trips.length})</Typography>
+                <Typography style={{ textAlign: 'center', margin: 30 }} variant='h5'>My Trips ({trips.length})</Typography>
             </Divider>
             <div style={{ display: 'inline-block', width: 'auto', height: 'auto' }}>
                 <Box sx={{
@@ -249,7 +249,7 @@ function DashboardPage() {
                 </Box>
             </div>
             <Divider>
-                <Typography style={{ textAlign: 'center', margin: 30 }} variant='h4'>Trending Destinations</Typography>
+                <Typography style={{ textAlign: 'center', margin: 30 }} variant='h5'>Trending Destinations</Typography>
             </Divider>
             <TrendingDestinations />
         </div>
