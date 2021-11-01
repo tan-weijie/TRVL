@@ -16,6 +16,7 @@
 </h4>
 <p align="left">
  <img src="https://github.com/tan-weijie/TRVL/blob/main/snapshots/Dashboard.png" width=80% height=80%>
+ <img src="https://github.com/tan-weijie/TRVL/blob/main/snapshots/Trips.png" width=80% height=80%>
  <img src="https://github.com/tan-weijie/TRVL/blob/main/snapshots/Trending.png" width=80% height=80%>
 </p>
 
