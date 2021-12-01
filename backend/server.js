@@ -69,7 +69,7 @@ app.post('/login', async (req, res) => {
         if (user){
             const matched = await bcrypt.compareSync(password, user.password)
             if(matched){
-                await jwt.sign({user}, secret, {expiresIn: 3600}, (err, token) => {
+                await jwt.sign({user}, secret, {expiresIn: 36000}, (err, token) => {
                     if(err) throw err;
                     // stores token in http cookie headers
                     res.cookie('token', token, {httpOnly: false}).json(
@@ -144,7 +144,7 @@ app.get('/trip/:id', async (req, res) => {
 })
 
 // Create 1 trip
-app.post('/', async (req, res) => {
+app.post('/trip', async (req, res) => {
     try {
         const data = await tripModel.create(req.body);
         res.send('added new trip')
@@ -164,14 +164,14 @@ app.delete('/trip/:id', async (req, res) => {
 })
 
 // Update 1 trip
-app.put('/trip/:id', async (req, res) => {
-    try {
-        const data = await tripModel.findOneAndUpdate({_id: req.params.id}, req.body);
-        res.send(data);
-    } catch (error) {
-        console.log({status: 'bad', msg: error.message});
-    }
-})
+// app.put('/trip/:id', async (req, res) => {
+//     try {
+//         const data = await tripModel.findOneAndUpdate({_id: req.params.id}, req.body);
+//         res.send(data);
+//     } catch (error) {
+//         console.log({status: 'bad', msg: error.message});
+//     }
+// })
 
 // Add activities
 app.put('/days/:id', async (req, res) => {
@@ -205,5 +205,5 @@ app.delete('/activities/:id', async (req, res) => {
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-    console.log(`Server connect on port ${PORT}`);
+    console.log(`Server connected on port ${PORT}`);
 })

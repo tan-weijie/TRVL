@@ -118,7 +118,7 @@ function DashboardPage() {
             userId: user
         };
 
-        axios.post(uri, data)
+        axios.post(uri + 'trip', data)
             .then(response => {
                 console.log('posted', response);
                 setCountry('');
