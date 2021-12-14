@@ -12,6 +12,9 @@ import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
 import AirplaneTicketIcon from '@mui/icons-material/AirplaneTicket';
 
+const buttonStyle = {
+    transition: "transform 0.15s ease-in-out", "&:hover": { transform: "scale3d(1.1 , 1.1, 1)"}
+}
 
 export default function Navbar() {
 
@@ -34,14 +37,14 @@ export default function Navbar() {
         <Box sx={{ flexGrow: 1, zIndex: 1, width: '100vw', position: 'sticky'}}>
             <AppBar style={{backgroundColor: 'black'}} >
                 <Toolbar>
-                    <AirplaneTicketIcon />
+                    <AirplaneTicketIcon fontSize='large'/>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         <Link href="http://localhost:3000/home" underline="none" color="inherit">
                             TRVL
                         </Link>
                     </Typography>
-                    {user && <Button color="inherit">{user.username}</Button>}
-                    {user ? <Button onClick={handleLogOut} color="inherit">Logout</Button> : <Button onClick={handleLogin} color="inherit">Login</Button>}
+                    {user && <Button sx={buttonStyle} color="inherit">{user.username}</Button>}
+                    {user ? <Button sx={buttonStyle} onClick={handleLogOut} color="inherit">Logout</Button> : <Button sx={buttonStyle} onClick={handleLogin} color="inherit">Login</Button>}
                 </Toolbar>
             </AppBar>
         </Box>
