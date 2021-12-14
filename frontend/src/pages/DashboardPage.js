@@ -5,7 +5,7 @@ import { User } from '../App';
 import TrendingDestinations from '../components/TrendingDestinations';
 
 // mui
-import { Box } from '@mui/system';
+import { Box, minHeight } from '@mui/system';
 import { Alert, Button, Card, CardContent, CardMedia, CardActionArea, CardActions, Divider, Typography, TextField } from '@mui/material';
 import { Delete } from '@mui/icons-material';
 
@@ -23,6 +23,7 @@ const style = {
 
 function DashboardPage() {
     const uri = "http://localhost:5000/"
+    const apiKey = process.env.REACT_APP_PEXELS_API_KEY;
     const beach = "https://images.pexels.com/photos/1705254/pexels-photo-1705254.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200";
 
     const user = useContext(User);
@@ -34,8 +35,9 @@ function DashboardPage() {
     const [refresh, setRefresh] = useState(false);
     const [alert, setAlert] = useState('');
 
-    const fetchTrips = () => {
-        user && axios.get(uri + `trips/${user._id}`)
+    const fetchTrips = (signal) => {
+
+        user && axios.get(uri + `trips/${user._id}`, { signal })
             .then(response => {
                 setTrips(response.data);
             })
@@ -45,11 +47,18 @@ function DashboardPage() {
     }
 
     useEffect(() => {
-        fetchTrips();
-    }, [user, refresh])
 
-    const fetchImage = async (country) => {
-        const apiKey = "563492ad6f91700001000001fb4b588e36424f5db5e96fd30f05c911";
+        const controller = new AbortController();
+        const signal = controller.signal;
+
+        fetchTrips(signal);
+
+        return(()=>{
+            controller.abort();
+        })
+    }, [user, refresh])
+    
+    const fetchImage = async () => {
         const imgUri = `https://api.pexels.com/v1/search?query=${country}&orientation=landscape`;
 
         try {
@@ -71,6 +80,7 @@ function DashboardPage() {
 
     const handleCountry = (e) => {
         setCountry(e.target.value);
+        console.log(country.charAt(0).toUpperCase() + country.slice(1).toLowerCase());
     }
 
     const handleStartDate = (e) => {
@@ -97,8 +107,11 @@ function DashboardPage() {
             setAlert('End date should not be earlier than start date.');
             return
         }
-        const src = await fetchImage(country);
+
+        const src = await fetchImage();
         console.log(src);
+        let formattedCountry = country.charAt(0).toUpperCase() + country.slice(1).toLowerCase();
+        console.log(formattedCountry);
         let sDate = new Date(startDate);
         let eDate = new Date(endDate);
         let difference = eDate - sDate;
@@ -107,10 +120,10 @@ function DashboardPage() {
         for (let i = 0; i <= difference; i++) {
             days.push({ date: new Date(sDate.getTime() + (i * 24 * 60 * 60 * 1000)), activities: [] })
         }
-
+        
         const data = {
             _id: uuid(),
-            country,
+            country: formattedCountry,
             startDate,
             endDate,
             days,
@@ -151,7 +164,6 @@ function DashboardPage() {
     return (
         <div>
             <img style={{ width: '100vw', height: '80vh', objectFit: 'cover' }} className="dashboard-background" src={beach} alt="" />
-            <div >
                 <Box sx={style}>
                     <form style={{textAlign: 'center'}}onSubmit={handleSubmit}>
                         <Typography style={{ margin: 10 }} variant='h4'>
@@ -195,11 +207,9 @@ function DashboardPage() {
                         <Button style={{ margin: 10 }} variant="outlined" type="submit">Add Trip</Button>
                     </form>
                 </Box>
-            </div>
             <Divider>
                 <Typography style={{ textAlign: 'center', margin: 30 }} variant='h5'>My Trips ({trips.length})</Typography>
             </Divider>
-            <div style={{ display: 'inline-block', width: 'auto', height: 'auto' }}>
                 <Box sx={{
                     display: 'flex',
                     flexWrap: 'wrap',
@@ -220,7 +230,7 @@ function DashboardPage() {
                         const eMonth = eDate.toLocaleString('default', { month: 'short' });
                         const eYear = eDate.toLocaleString('default', { year: 'numeric' });
                         return (
-                            <Card sx={{ p: 1, m: 2, minWidth: 200, maxWidth: 345 }}>
+                            <Card sx={{ transition: "transform 0.15s ease-in-out", "&:hover": { transform: "scale3d(1.1, 1.1, 1)" }, p: 1, m: 2, minWidth: 250, maxWidth: 345, flexGrow: 1, flexShrink: 1 }}>
                                 <CardActionArea onClick={handleClick} id={trip._id}>
                                     <CardMedia
                                         id={trip._id}
@@ -247,7 +257,6 @@ function DashboardPage() {
                         )
                     })}
                 </Box>
-            </div>
             <Divider>
                 <Typography style={{ textAlign: 'center', margin: 30 }} variant='h5'>Trending Destinations</Typography>
             </Divider>

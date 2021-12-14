@@ -26,12 +26,20 @@ function ShowTripPage() {
     const uri = process.env.REACT_APP_SERVERURI;
 
     useEffect(() => {
-        fetchTrip();
+        const controller = new AbortController();
+        const signal = controller.signal;
+
+        fetchTrip(signal);
+
+        return(() => {
+            controller.abort();
+        })
     }, [refresh])
 
-    const fetchTrip = () => {
+    const fetchTrip = (signal) => {
+
         setRefresh(false);
-        axios.get(uri + `trip/${id}`)
+        axios.get(uri + `trip/${id}`, { signal })
             .then((response) => {
                 setTrip(response.data);  
             })
