@@ -92,7 +92,7 @@ export default function ActivityModal (props) {
 
     return (
         <div>
-            <Button size='big' startIcon={<AddIcon/>} onClick={handleOpen}>Add</Button>
+            <Button style={{fontFamily: "Lato"}} size='big' startIcon={<AddIcon/>} onClick={handleOpen}>Add</Button>
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -100,66 +100,76 @@ export default function ActivityModal (props) {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
-                    <Typography variant="h5">New Activity</Typography>
-                    {alert && <Alert severity="error">{alert}</Alert>}
+                    <Typography style={{fontFamily: "Lato"}} variant="h5">New Activity</Typography>
+                    {alert && <Alert style={{fontFamily: "Lato"}} severity="error">{alert}</Alert>}
                     <TextField 
                         fullWidth margin='normal' 
+                        inputProps={{style: {fontFamily: "Lato"}}}
                         id="outlined-basic" 
                         label="Activity Name" 
                         variant="outlined" 
                         InputLabelProps={{
                         shrink: true,
+                        style: {fontFamily: "Lato"}
                         }}
                         onChange={handleName}
                         value={name} 
                     />
                     <TextField 
                         fullWidth margin='normal' 
+                        inputProps={{style: {fontFamily: "Lato"}}}
                         id="outlined-basic" 
                         label="Location" 
                         variant="outlined" 
                         InputLabelProps={{
                         shrink: true,
+                        style: {fontFamily: "Lato"}
                         }}
                         onChange={handleLocation}
                         value={location} 
                     />
                     <TextField 
                         fullWidth margin='normal' 
+                        inputProps={{style: {fontFamily: "Lato"}}}
                         id="outlined-basic" 
                         label="Start Time" 
                         type='time' 
                         variant='outlined' 
                         InputLabelProps={{
                         shrink: true,
+                        style: {fontFamily: "Lato"}
                         }} 
                         onChange={handleStartTime}
                         value={startTime}
                     />
                     <TextField 
                         fullWidth margin='normal' 
+                        inputProps={{style: {fontFamily: "Lato"}}}
                         id="outlined-basic" 
                         label="End Time" 
                         type='time' 
                         variant='outlined' 
                         InputLabelProps={{
                         shrink: true,
+                        style: {fontFamily: "Lato"}
                         }} 
                         onChange={handleEndTime}
                         value={endTime}
                     />
                     <TextField 
-                    fullWidth margin='normal' 
-                    id="outlined-basic" 
-                    label="Transport" 
-                    variant="outlined" 
-                    InputLabelProps={{
-                        shrink: true,
+                        fullWidth margin='normal' 
+                        inputProps={{style: {fontFamily: "Lato"}}}
+                        id="outlined-basic" 
+                        label="Transport" 
+                        variant="outlined" 
+                        InputLabelProps={{
+                            shrink: true,
+                            style: {fontFamily: "Lato"}
                     }} 
                     onChange={handleTransport}
                     value={transport}
                     />
-                    <Button onClick={handleSubmit} type='submit'>Add Activity</Button>
+                    <Button style={{fontFamily: "Lato"}} onClick={handleSubmit} type='submit'>Add Activity</Button>
                 </Box>
             </Modal>
         </div>

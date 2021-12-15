@@ -165,18 +165,20 @@ function DashboardPage() {
         <div>
             <img style={{ width: '100vw', height: '80vh', objectFit: 'cover' }} className="dashboard-background" src={beach} alt="" />
                 <Box sx={style}>
-                    <form style={{textAlign: 'center'}}onSubmit={handleSubmit}>
-                        <Typography style={{ margin: 10 }} variant='h4'>
+                    <form style={{ textAlign: 'center' }} onSubmit={handleSubmit}>
+                        <Typography style={{ fontFamily: 'Lato', margin: 10 }} variant='h4'>
                             Itinerary Planner
                         </Typography>
                         {alert && <Alert severity="error">{alert}</Alert>}
                         <TextField
                             fullWidth margin='normal'
+                            inputProps={{style: {fontFamily: 'Lato'}}}
                             id="outlined-basic"
                             label="Country"
                             variant="outlined"
                             InputLabelProps={{
                                 shrink: true,
+                                style: {fontFamily: "Lato"}
                             }}
                             onChange={handleCountry}
                             type="text"
@@ -184,31 +186,35 @@ function DashboardPage() {
                             placeholder="Enter destination" />
                         <TextField
                             fullWidth margin='normal'
+                            inputProps={{style: {fontFamily: 'Lato'}}}
                             id="outlined-basic"
                             label="Start Date"
                             variant="outlined"
                             InputLabelProps={{
                                 shrink: true,
+                                style: {fontFamily: "Lato"}
                             }}
                             onChange={handleStartDate}
                             type="date"
                             value={startDate} />
                         <TextField
                             fullWidth margin='normal'
+                            inputProps={{style: {fontFamily: 'Lato'}}}
                             id="outlined-basic"
                             label="End Date"
                             variant="outlined"
                             InputLabelProps={{
                                 shrink: true,
+                                style: {fontFamily: "Lato"}
                             }}
                             onChange={handleEndDate}
                             type="date"
                             value={endDate} />
-                        <Button style={{ margin: 10 }} variant="outlined" type="submit">Add Trip</Button>
+                        <Button style={{ fontFamily: 'Lato', margin: 10 }} variant="outlined" type="submit">Add Trip</Button>
                     </form>
                 </Box>
             <Divider>
-                <Typography style={{ textAlign: 'center', margin: 30 }} variant='h5'>My Trips ({trips.length})</Typography>
+                <Typography style={{ fontFamily: 'Lato', textAlign: 'center', margin: 30 }} variant='h5'>My Trips ({trips.length})</Typography>
             </Divider>
                 <Box sx={{
                     display: 'flex',
@@ -217,7 +223,6 @@ function DashboardPage() {
                     justifyContent: 'center',
                     width: '100vw'
                 }}>
-
                     {trips.map(trip => {
                         // startDate
                         let sDate = new Date(trip.startDate);
@@ -230,7 +235,7 @@ function DashboardPage() {
                         const eMonth = eDate.toLocaleString('default', { month: 'short' });
                         const eYear = eDate.toLocaleString('default', { year: 'numeric' });
                         return (
-                            <Card sx={{ borderRadius: 2, transition: "transform 0.15s ease-in-out", "&:hover": { transform: "scale3d(1.1 , 1.1, 1)" }, p: 1, m: 2, minWidth: 250, maxWidth: 345, flexGrow: 1, flexShrink: 1 }}>
+                            <Card sx={{ borderRadius: 2, boxShadow: 20, transition: "transform 0.15s ease-in-out", "&:hover": { transform: "scale3d(1.1 , 1.1, 1)" }, p: 1, m: 2, minWidth: 250, maxWidth: 345, flexGrow: 1, flexShrink: 1 }}>
                                 <CardActionArea onClick={handleClick} id={trip._id}>
                                     <CardMedia
                                         id={trip._id}
@@ -240,16 +245,16 @@ function DashboardPage() {
                                         alt="no image"
                                     />
                                     <CardContent id={trip._id}>
-                                        <Typography id={trip._id} gutterBottom variant="h5" component="div">
+                                        <Typography style={{fontFamily: 'Lato'}} id={trip._id} gutterBottom variant="h5" component="div">
                                             {trip.country}
                                         </Typography>
-                                        <Typography id={trip._id} variant="body2" color="text.secondary">
+                                        <Typography style={{fontFamily: 'Lato'}} id={trip._id} variant="body2" color="text.secondary">
                                             {`${sDay} ${sMonth} ${sYear}`} - {`${eDay} ${eMonth} ${eYear}`}
                                         </Typography>
                                     </CardContent>
                                 </CardActionArea>
                                 <CardActions>
-                                    <Button startIcon={<Delete />} onClick={handleDelete} id={trip._id} size="small" color="primary">
+                                    <Button style={{fontFamily: 'Lato'}} startIcon={<Delete />} onClick={handleDelete} id={trip._id} size="small" color="primary">
                                         Delete
                                     </Button>
                                 </CardActions>
@@ -258,7 +263,7 @@ function DashboardPage() {
                     })}
                 </Box>
             <Divider>
-                <Typography style={{ textAlign: 'center', margin: 30 }} variant='h5'>Trending Destinations</Typography>
+                <Typography style={{ fontFamily: 'Lato' ,textAlign: 'center', margin: 30 }} variant='h5'>Trending Destinations</Typography>
             </Divider>
             <TrendingDestinations />
         </div>

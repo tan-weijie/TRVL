@@ -11,10 +11,11 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
 import AirplaneTicketIcon from '@mui/icons-material/AirplaneTicket';
-import { SportsRugbySharp } from '@mui/icons-material';
 
 const buttonStyle = {
-    transition: "transform 0.15s ease-in-out", "&:hover": { transform: "scale3d(1.1 , 1.1, 1)"}
+    transition: "transform 0.15s ease-in-out", 
+    "&:hover": { transform: "scale3d(1.1 , 1.1, 1)" },
+    fontFamily: 'Lato'
 }
 
 export default function Navbar() {
@@ -28,7 +29,7 @@ export default function Navbar() {
     }
 
     const handleLogOut = () => {
-        axios.post(uri + 'logout',{}, {withCredentials:true, credentials: 'include'})
+        axios.post(uri + 'logout',{}, { withCredentials: true, credentials: 'include' })
         .then(response=>{
             console.log(response);
             window.location.href = '../login'
@@ -36,11 +37,11 @@ export default function Navbar() {
     }
     return (
         <Box sx={{ flexGrow: 1, zIndex: 1, width: '100vw', position: 'sticky'}}>
-            <AppBar style={{backgroundColor: 'rgba(0,0,0,.7)'}} >
+            <AppBar style={{backgroundColor: 'rgba(0,0,0,.6)'}} >
                 <Toolbar>
                     <AirplaneTicketIcon fontSize='large'/>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        <Link href="http://localhost:3000/home" underline="none" color="inherit">
+                        <Link style={{ fontFamily: 'Lato'}} href="http://localhost:3000/home" underline="none" color="inherit">
                             TRVL
                         </Link>
                     </Typography>

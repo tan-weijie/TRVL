@@ -73,48 +73,54 @@ function SignupForm() {
     }
     return (
         <Box sx={style}>
-            <Typography style={{margin: 5}} variant="h5">
+            <Typography style={{fontFamily: "Lato", margin: 5}} variant="h5">
                 Signup New Account
             </Typography>
-            {alert && <Alert severity="error">{alert}</Alert>}
-            <Link style={{margin: 5}} href="./login" underline='hover'>
+            {alert && <Alert style={{fontFamily: "Lato"}} severity="error">{alert}</Alert>}
+            <Link style={{fontFamily: "Lato", margin: 5}} href="./login" underline='hover'>
                 Already a user? Click here to login instead.
             </Link>
             <TextField
                 fullWidth margin='normal'
+                inputProps={{style: {fontFamily: "Lato"}}}
                 id="outlined-basic"
                 label="Username"
                 variant="outlined"
                 InputLabelProps={{
                     shrink: true,
+                    style: {fontFamily: "Lato"}
                 }}
                 onChange={handleUsername}
                 value={username}
             />
             <TextField
                 fullWidth margin='normal'
+                inputProps={{style: {fontFamily: "Lato"}}}
                 id="outlined-basic"
                 label="Email"
                 variant="outlined"
                 InputLabelProps={{
                     shrink: true,
+                    style: {fontFamily: "Lato"}
                 }}
                 onChange={handleEmail}
                 value={email}
             />
             <TextField
                 fullWidth margin='normal'
+                inputProps={{style: {fontFamily: "Lato"}}}
                 id="outlined-basic"
                 label="Password"
                 type="password"
                 variant="outlined"
                 InputLabelProps={{
                     shrink: true,
+                    style: {fontFamily: "Lato"}
                 }}
                 onChange={handlePassword}
                 value={password}
             />
-            <Button onClick={handleSubmit}>
+            <Button style={{fontFamily: "Lato"}} onClick={handleSubmit}>
                 Signup
             </Button>
         </Box>
