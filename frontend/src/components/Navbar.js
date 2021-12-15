@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
 import AirplaneTicketIcon from '@mui/icons-material/AirplaneTicket';
+import { SportsRugbySharp } from '@mui/icons-material';
 
 const buttonStyle = {
     transition: "transform 0.15s ease-in-out", "&:hover": { transform: "scale3d(1.1 , 1.1, 1)"}
@@ -35,7 +36,7 @@ export default function Navbar() {
     }
     return (
         <Box sx={{ flexGrow: 1, zIndex: 1, width: '100vw', position: 'sticky'}}>
-            <AppBar style={{backgroundColor: 'black'}} >
+            <AppBar style={{backgroundColor: 'rgba(0,0,0,.7)'}} >
                 <Toolbar>
                     <AirplaneTicketIcon fontSize='large'/>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>

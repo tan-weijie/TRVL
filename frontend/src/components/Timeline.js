@@ -14,10 +14,10 @@ const timeParser = (time) => {
     let timeHour = parseInt(time.split(':')[0]); 
     if (timeHour >= 12){
         timeHour = ((timeHour + 11) % 12 + 1);
-        let parsedTime = `${timeHour}:${time.split(':')[1]}PM`;
+        let parsedTime = `${timeHour}:${time.split(':')[1]} PM`;
         return parsedTime;
     } else {
-        let parsedTime = `${time}AM`;
+        let parsedTime = `${time} AM`;
         return parsedTime;
     }
 }
@@ -73,7 +73,7 @@ export default function CustomizedTimeline(props) {
                                     variant="body2"
                                     color="text.secondary"
                                 >
-                                    9:30 am
+                                    9:30 AM
                                 </TimelineOppositeContent>
                                 <TimelineSeparator>
                                     <TimelineConnector />
@@ -98,7 +98,7 @@ export default function CustomizedTimeline(props) {
                                     variant="body2"
                                     color="text.secondary"
                                 >
-                                    10:30 pm
+                                    10:30 PM
                                 </TimelineOppositeContent>
                                 <TimelineSeparator>
                                     <TimelineConnector />
@@ -113,7 +113,8 @@ export default function CustomizedTimeline(props) {
                                     </Typography>
                                     <Typography>Arrival</Typography>
                                 </TimelineContent>
-                            </TimelineItem>}
+                            </TimelineItem>
+                        }
                         {day.activities.map(element => {
                             return (
                                 <TimelineItem key="1" className="day">
@@ -123,6 +124,7 @@ export default function CustomizedTimeline(props) {
                                         variant="body2"
                                         color="text.secondary"
                                     >
+                                        {timeParser(element.startTime)}
                                     </TimelineOppositeContent>
                                     <TimelineSeparator>
                                         <TimelineConnector />

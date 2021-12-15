@@ -230,7 +230,7 @@ function DashboardPage() {
                         const eMonth = eDate.toLocaleString('default', { month: 'short' });
                         const eYear = eDate.toLocaleString('default', { year: 'numeric' });
                         return (
-                            <Card sx={{ transition: "transform 0.15s ease-in-out", "&:hover": { transform: "scale3d(1.1, 1.1, 1)" }, p: 1, m: 2, minWidth: 250, maxWidth: 345, flexGrow: 1, flexShrink: 1 }}>
+                            <Card sx={{ borderRadius: 2, transition: "transform 0.15s ease-in-out", "&:hover": { transform: "scale3d(1.1 , 1.1, 1)" }, p: 1, m: 2, minWidth: 250, maxWidth: 345, flexGrow: 1, flexShrink: 1 }}>
                                 <CardActionArea onClick={handleClick} id={trip._id}>
                                     <CardMedia
                                         id={trip._id}
