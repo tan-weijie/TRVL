@@ -35,7 +35,7 @@ function LoginForm() {
     const handleSubmit = (e) => {
         e.preventDefault();
         let data = {
-            username,
+            username: username.toLowerCase(),
             password
         };
         if (!username || !password) {

@@ -39,7 +39,7 @@ function SignupForm() {
     const handleSubmit = (e) => {
         e.preventDefault();
         let data = {
-            username,
+            username: username.toLowerCase(),
             email,
             password
         };
