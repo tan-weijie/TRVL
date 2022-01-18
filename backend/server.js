@@ -7,7 +7,6 @@ const jwt = require('jsonwebtoken');
 const cookieParser = require("cookie-parser")
 require('dotenv').config()
 
-
 // db
 const connectDB = require('./models/db');
 const tripModel = require('./models/Trip');
@@ -27,7 +26,12 @@ app.use(cookieParser())
 
 const secret = process.env.SECRET;
 
-//find user with cookie token
+// Heroku test
+app.get("/", (req, res) => {
+    res.send("Test");
+})
+
+// Find user with cookie token
 app.get('/user', async (req,res)=>{
     try {
         const payload = await jwt.verify(req.cookies.token, secret)
@@ -96,9 +100,9 @@ app.post('/login', async (req, res) => {
 })
 
 // Logout
-app.post('/logout', (req, res) => {
-    res.cookie('token', '').send('logged out');
-})
+// app.post('/logout', (req, res) => {
+//     res.cookie('token', '').send('logged out');
+// })
 
 function authToken(req, res, next) {
     const authHeader = req.headers['authorization'];
@@ -115,11 +119,6 @@ function authToken(req, res, next) {
         next();
     })
 }
-
-//Logout
-app.post('/logout',(req,res)=>{
-    res.cookie('token','', {httpOnly:false}).send()
-})
 
 ///////////////////////////////////////////////////////
 
