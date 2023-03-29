@@ -212,6 +212,7 @@ function DashboardPage() {
                             value={endDate} />
                         <Button style={{ fontFamily: 'Lato', margin: 10 }} variant="outlined" type="submit">Add Trip</Button>
                     </form>
+                    {/* new shit */}
                 </Box>
             <Divider>
                 <Typography style={{ fontFamily: 'Lato', textAlign: 'center', margin: 30 }} variant='h5'>My Trips ({trips.length})</Typography>
